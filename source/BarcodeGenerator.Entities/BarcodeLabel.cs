@@ -3,10 +3,6 @@
 // Author            : Robert Eberhart
 // Created           : 06-09-2026
 // ***********************************************************************
-// <copyright file="BarcodeLabel.cs" company="Littoral Combat Ships">
-//     Copyright (c) 2026 Littoral Combat Ships. All rights reserved.
-// </copyright>
-// ***********************************************************************
 namespace BarcodeGenerator.Entities;
 
 /// <summary>
@@ -17,6 +13,20 @@ namespace BarcodeGenerator.Entities;
 /// </remarks>
 public class BarcodeLabel {
     /// <summary>
+    /// Gets the generated barcode value, which is a combination of the source code,
+    /// purchase date, and label index.
+    /// </summary>
+    /// <value>
+    /// A string representing the barcode value in the format:
+    /// <c>{SourceCode}-{DatePurchased}-{LabelIndex}</c>.
+    /// </value>
+    /// <remarks>
+    /// The <see cref="BarcodeValue"/> property dynamically constructs the barcode value
+    /// based on the <see cref="SourceCode"/>, <see cref="DatePurchased"/>, and <see cref="LabelIndex"/> properties.
+    /// </remarks>
+    public string BarcodeValue => $"{SourceCode}-{DatePurchased}-{LabelIndex}";
+
+    /// <summary>
     /// Gets or sets the date when the barcode label was purchased.
     /// </summary>
     /// <value>
@@ -25,15 +35,7 @@ public class BarcodeLabel {
     /// <remarks>
     /// The <see cref="DatePurchased"/> property is used to store the date of purchase for tracking and record-keeping purposes.
     /// </remarks>
-    public string DatePurchased { get; set; }
-
-    /// <summary>
-    /// Gets or sets the unique identifier for the barcode label.
-    /// </summary>
-    /// <value>
-    /// A <see cref="Guid"/> representing the unique identifier of the barcode label.
-    /// </value>
-    public Guid Id { get; set; }
+    public string DatePurchased { get; set; } = DateTime.Now.ToString("yyyyMMdd");
 
     /// <summary>
     /// Gets or sets the index of the label.
@@ -52,5 +54,5 @@ public class BarcodeLabel {
     /// <remarks>
     /// This property is used to store additional information or metadata related to the barcode label.
     /// </remarks>
-    public string SourceCode { get; set; }
+    public string SourceCode { get; set; } = "None";
 }
