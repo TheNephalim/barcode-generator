@@ -1,4 +1,5 @@
 using BarcodeGenerator.Entities;
+using BarcodeGenerator.LabelGeneration;
 
 namespace BarcodeGenerator;
 
@@ -10,6 +11,8 @@ namespace BarcodeGenerator;
 /// including input fields for source code, start number, and end number.
 /// </remarks>
 public partial class MainForm : Form {
+    private readonly IBarcodeLabelGenerator _barcodeLabelGenerator;
+    private readonly IRenderedBarcodeLabelGenerator _renderedBarcodeLabelGenerator;
     private readonly Dictionary<string, string> _sources = new() {
         { "PC", "Personal Collection" },
         { "GW", "Goodwill" },
@@ -30,37 +33,13 @@ public partial class MainForm : Form {
     /// This constructor sets up the main form of the Barcode Generator application
     /// by initializing its components and preparing the user interface for interaction.
     /// </remarks>
-    public MainForm() {
+    public MainForm(IRenderedBarcodeLabelGenerator renderedBarcodeLabelGenerator, IBarcodeLabelGenerator barcodeLabelGenerator) {
+        if (barcodeLabelGenerator == null) throw new ArgumentNullException(nameof(barcodeLabelGenerator));
         InitializeComponent();
-    }
 
-    /// <summary>
-    /// Generates a list of barcode labels based on the specified range, source code, and purchase date.
-    /// </summary>
-    /// <param name="startIndex">The starting index for generating barcode labels.</param>
-    /// <param name="endIndex">The ending index for generating barcode labels.</param>
-    /// <param name="sourceCode">The source code associated with the barcode labels. Can be <c>null</c>.</param>
-    /// <param name="datePurchased">The purchase date to be included in the barcode labels, formatted as a string.</param>
-    /// <returns>A list of <see cref="BarcodeLabel"/> objects representing the generated barcode labels.</returns>
-    /// <remarks>
-    /// This method creates barcode labels with sequential indexes padded to five digits.
-    /// The <paramref name="sourceCode"/> and <paramref name="datePurchased"/> are applied to each label.
-    /// </remarks>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="sourceCode"/> is <c>null</c>.</exception>
-    private static IList<BarcodeLabel> GenerateBarcodes(int startIndex, int endIndex, string? sourceCode, string datePurchased) {
-        var barcodes = new List<BarcodeLabel>();
-
-        for (var i = startIndex; i <= endIndex; i++) {
-            var barcodeLabel = new BarcodeLabel() {
-                SourceCode = sourceCode!,
-                DatePurchased = datePurchased,
-                LabelIndex = i.ToString().PadLeft(5, '0')
-            };
-
-            barcodes.Add(barcodeLabel);
-        }
-
-        return barcodes;
+        _renderedBarcodeLabelGenerator =
+            renderedBarcodeLabelGenerator ?? throw new ArgumentNullException(nameof(renderedBarcodeLabelGenerator));
+        _barcodeLabelGenerator = barcodeLabelGenerator;
     }
 
     /// <summary>
@@ -75,8 +54,8 @@ public partial class MainForm : Form {
     /// <remarks>
     /// Displays a warning message to the user if the range is invalid.
     /// </remarks>
-    private static bool ValidLabelIndexes(int startIndex, int endIndex) {
-        if (startIndex < endIndex) {
+    private static bool InvalidLabelIndexes(int startIndex, int endIndex) {
+        if (startIndex > endIndex) {
             MessageBox.Show("Start number cannot be greater than end number",
                 "Invalid Range",
                 MessageBoxButtons.OK,
@@ -100,16 +79,42 @@ public partial class MainForm : Form {
     /// </remarks>
     private void btnGenerate_Click(object sender, EventArgs e) {
         var sourceCode = cmboSources.SelectedValue?.ToString();
-        var datePurchased = monthCalendar1.SelectionStart.ToString("yyyyMMdd");
+        var datePurchased = monthCalendar1.SelectionStart;
 
         var startIndex = Convert.ToInt32(nudStartNumber.Value);
         var endIndex = Convert.ToInt32(nudEndNumber.Value);
 
-        if (ValidLabelIndexes(startIndex, endIndex)) return;
+        if (InvalidLabelIndexes(startIndex, endIndex)) return;
+
+        if (string.IsNullOrEmpty(sourceCode)) {
+            MessageBox.Show("Please select a source code.",
+                "Missing Source",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+            return;
+        }
 
         var barcodes = GenerateBarcodes(startIndex, endIndex, sourceCode, datePurchased);
 
         MessageBox.Show("Generate!", "Information", MessageBoxButtons.OKCancel);
+    }
+
+    /// <summary>
+    /// Generates a list of rendered barcode labels based on the specified range, source code, and purchase date.
+    /// </summary>
+    /// <param name="startIndex">The starting index for generating barcode labels.</param>
+    /// <param name="endIndex">The ending index for generating barcode labels.</param>
+    /// <param name="sourceCode">The source code associated with the barcode labels. Can be <c>null</c>.</param>
+    /// <param name="datePurchased">The purchase date to be included in the barcode labels.</param>
+    /// <returns>A list of <see cref="RenderedBarcodeLabel"/> objects representing the generated barcode labels.</returns>
+    /// <remarks>
+    /// This method first generates barcode labels using the <see cref="IBarcodeLabelGenerator"/> implementation.
+    /// It then converts these labels into rendered barcode labels using the <see cref="IRenderedBarcodeLabelGenerator"/> implementation.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="sourceCode"/> is <c>null</c>.</exception>
+    private IList<RenderedBarcodeLabel> GenerateBarcodes(int startIndex, int endIndex, string sourceCode, DateTime datePurchased) {
+        var barcodeLabels = _barcodeLabelGenerator.Generate(startIndex, endIndex, sourceCode, datePurchased);
+        return _renderedBarcodeLabelGenerator.Generate(barcodeLabels);
     }
 
     /// <summary>
