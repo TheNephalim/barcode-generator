@@ -9,7 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BarcodeGenerator.Entities\BarcodeGenerator.Entities.csproj" />
+    <PackageReference Include="Autofac" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BarcodeGenerator.Entities\BarcodeGenerator.Entities.csproj" />
+    <ProjectReference Include="..\BarcodeGenerator.AutofacConfiguration\BarcodeGenerator.AutofacConfiguration.csproj" />
   </ItemGroup>
 
 </Project>
