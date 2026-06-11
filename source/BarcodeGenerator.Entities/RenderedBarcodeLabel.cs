@@ -47,6 +47,15 @@ public class RenderedBarcodeLabel : IDisposable {
     public BarcodeLabel Label { get; set; } = null!;
 
     /// <summary>
+    /// Gets or sets the display text associated with the rendered barcode label.
+    /// </summary>
+    /// <remarks>
+    /// This text is typically displayed alongside the barcode image to provide additional context or information.
+    /// It is rendered using the <see cref="OneByThreeLabelRenderer"/> or similar rendering implementations.
+    /// </remarks>
+    public string? DisplayText { get; set; }
+
+    /// <summary>
     /// Releases all resources used by the <see cref="RenderedBarcodeLabel"/> instance.
     /// </summary>
     /// <remarks>
