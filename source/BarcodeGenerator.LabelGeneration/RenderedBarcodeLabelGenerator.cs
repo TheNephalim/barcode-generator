@@ -63,7 +63,8 @@ public class RenderedBarcodeLabelGenerator : IRenderedBarcodeLabelGenerator {
         return labels
             .Select(label => new RenderedBarcodeLabel() {
                 Label = label,
-                BarcodeImage = _barcodeImageGenerator.GenerateCode128(label.BarcodeValue)
+                BarcodeImage = _barcodeImageGenerator.GenerateCode128(label.BarcodeValue),
+                DisplayText = label.BarcodeValue
             }).ToList();
     }
 }
