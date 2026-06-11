@@ -7,6 +7,7 @@
 using System.Drawing;
 using ZXing;
 using ZXing.Common;
+using ZXing.Windows.Compatibility;
 
 #pragma warning disable CA1416
 
@@ -48,7 +49,8 @@ public sealed class BarcodeImageGenerator : IBarcodeImageGenerator {
                 Width = 300,
                 Margin = 10,
                 PureBarcode = false
-            }
+            },
+            Renderer = new BitmapRenderer()
         };
 
         return writer.Write(barcodeValue);
