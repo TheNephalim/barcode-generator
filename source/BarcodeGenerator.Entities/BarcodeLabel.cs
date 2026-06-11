@@ -24,7 +24,7 @@ public class BarcodeLabel {
     /// The <see cref="BarcodeValue"/> property dynamically constructs the barcode value
     /// based on the <see cref="SourceCode"/>, <see cref="DatePurchased"/>, and <see cref="LabelIndex"/> properties.
     /// </remarks>
-    public string BarcodeValue => $"{SourceCode}-{DatePurchased}-{LabelIndex}";
+    public string BarcodeValue => $"{SourceCode}-{LabelIndex}";
 
     /// <summary>
     /// Gets or sets the date when the barcode label was purchased.
@@ -35,7 +35,7 @@ public class BarcodeLabel {
     /// <remarks>
     /// The <see cref="DatePurchased"/> property is used to store the date of purchase for tracking and record-keeping purposes.
     /// </remarks>
-    public string DatePurchased { get; set; } = DateTime.Now.ToString("yyyyMMdd");
+    public string DatePurchased { get; set; } = DateTime.Now.ToString("yyMMdd");
 
     /// <summary>
     /// Gets or sets the index of the label.
@@ -43,7 +43,7 @@ public class BarcodeLabel {
     /// <value>
     /// The index of the label, which is used to uniquely identify the position or order of the label.
     /// </value>
-    public string LabelIndex { get; set; } = "00000";
+    public string LabelIndex { get; set; } = "000000";
 
     /// <summary>
     /// Gets or sets the source code associated with the barcode label.
