@@ -12,6 +12,7 @@ namespace BarcodeGenerator;
 /// </remarks>
 public partial class MainForm : Form {
     private readonly IBarcodeLabelGenerator _barcodeLabelGenerator;
+    private readonly ILabelPrinterFactory _printerFactory;
     private readonly IRenderedBarcodeLabelGenerator _renderedBarcodeLabelGenerator;
     private readonly Dictionary<string, string> _sources = new() {
         { "PC", "Personal Collection" },
@@ -33,13 +34,13 @@ public partial class MainForm : Form {
     /// This constructor sets up the main form of the Barcode Generator application
     /// by initializing its components and preparing the user interface for interaction.
     /// </remarks>
-    public MainForm(IRenderedBarcodeLabelGenerator renderedBarcodeLabelGenerator, IBarcodeLabelGenerator barcodeLabelGenerator) {
-        if (barcodeLabelGenerator == null) throw new ArgumentNullException(nameof(barcodeLabelGenerator));
+    public MainForm(IRenderedBarcodeLabelGenerator renderedBarcodeLabelGenerator, IBarcodeLabelGenerator barcodeLabelGenerator, ILabelPrinterFactory printerFactory) {
         InitializeComponent();
 
         _renderedBarcodeLabelGenerator =
             renderedBarcodeLabelGenerator ?? throw new ArgumentNullException(nameof(renderedBarcodeLabelGenerator));
-        _barcodeLabelGenerator = barcodeLabelGenerator;
+        _barcodeLabelGenerator = barcodeLabelGenerator ?? throw new ArgumentNullException(nameof(barcodeLabelGenerator));
+        _printerFactory = printerFactory ?? throw new ArgumentNullException(nameof(printerFactory));
     }
 
     /// <summary>
@@ -95,6 +96,17 @@ public partial class MainForm : Form {
         }
 
         var barcodes = GenerateBarcodes(startIndex, endIndex, sourceCode, datePurchased);
+        var printJob = new LabelPrintJob() {
+            Labels = barcodes,
+            Copies = 1,
+            LabelSize = new LabelSize() {
+                Width = 300,
+                Height = 100
+            }
+        };
+
+        var labelPrinter = _printerFactory.GetPrinter(LabelTemplateType.OneByThree);
+        labelPrinter.Print(printJob);
 
         MessageBox.Show("Generate!", "Information", MessageBoxButtons.OKCancel);
     }
