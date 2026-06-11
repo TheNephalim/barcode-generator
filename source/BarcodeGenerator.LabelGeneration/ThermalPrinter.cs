@@ -5,7 +5,6 @@
 // ***********************************************************************
 
 using BarcodeGenerator.Entities;
-using System.Drawing;
 using System.Drawing.Printing;
 using System.Runtime.Versioning;
 
@@ -82,6 +81,13 @@ public sealed class ThermalPrinter(IRendererFactory rendererFactory) : ILabelPri
         printDocument.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
 
         printDocument.PrintPage += PrintLabelsHandler;
+
+        using var printDialog = new PrintDialog();
+        printDialog.Document = printDocument;
+        printDialog.UseEXDialog = true;
+
+        if (printDialog.ShowDialog() != DialogResult.OK) return;
+
         printDocument.Print();
     }
 
@@ -115,4 +121,5 @@ public sealed class ThermalPrinter(IRendererFactory rendererFactory) : ILabelPri
 
         e.HasMorePages = _currentLabelIndex < _labelsToPrint.Count;
     }
+
 }
