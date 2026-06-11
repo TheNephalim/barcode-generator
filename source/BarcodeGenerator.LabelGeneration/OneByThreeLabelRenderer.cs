@@ -9,7 +9,6 @@
 // ***********************************************************************
 
 using BarcodeGenerator.Entities;
-using System.Drawing;
 using System.Runtime.Versioning;
 
 namespace BarcodeGenerator.LabelGeneration;
@@ -68,31 +67,26 @@ public class OneByThreeLabelRenderer : ILabelRenderer {
             throw new ArgumentException("Bounds must have a positive width and height.", nameof(bounds));
         }
 
-        using var font = new Font("Arial", 10, FontStyle.Regular);
-
         graphics.Clear(Color.White);
-        const int padding = 8;
 
-        var textBounds = new Rectangle(
-            bounds.Left,
-            bounds.Bottom - 24,
-            bounds.Width,
-            20
-        );
+        graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+        graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+        graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+        graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighSpeed;
 
-        using var format = new StringFormat();
-        format.Alignment = StringAlignment.Center;
-        format.LineAlignment = StringAlignment.Center;
+        var paddingX = (int)Math.Round(bounds.Width * 0.06);
+        var top = (int)Math.Round(bounds.Height * 0.10);
 
         var barcodeBounds = new Rectangle(
-            bounds.Left + padding,
-            bounds.Top + padding,
-            bounds.Width - (padding * 2),
-            bounds.Height - (padding * 20)
-        );
+            bounds.Left + paddingX,
+            bounds.Top + top,
+            bounds.Width - (paddingX * 2),
+            (int)Math.Round(bounds.Height * 0.55));
 
         graphics.DrawImage(label.BarcodeImage, barcodeBounds);
+    }
 
-        graphics.DrawString(label.DisplayText, font, Brushes.Black, textBounds, format);
+    private static int InchesToPixels(float inches, float dpi) {
+        return (int)Math.Round(inches * dpi);
     }
 }
