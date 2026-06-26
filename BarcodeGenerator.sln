@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarcodeGenerator.LabelGener
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarcodeGenerator.AutofacConfiguration", "source\BarcodeGenerator.AutofacConfiguration\BarcodeGenerator.AutofacConfiguration.csproj", "{10666F97-9330-4426-8FC1-53C5A90220CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarcodeGenerator.Data", "source\BarcodeGenerator.Data\BarcodeGenerator.Data.csproj", "{C0B54578-12C6-4E69-A4F6-5ABED543FBEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{10666F97-9330-4426-8FC1-53C5A90220CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10666F97-9330-4426-8FC1-53C5A90220CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10666F97-9330-4426-8FC1-53C5A90220CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0B54578-12C6-4E69-A4F6-5ABED543FBEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0B54578-12C6-4E69-A4F6-5ABED543FBEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0B54578-12C6-4E69-A4F6-5ABED543FBEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0B54578-12C6-4E69-A4F6-5ABED543FBEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
