@@ -79,6 +79,8 @@ public sealed class ThermalPrinter(IRendererFactory rendererFactory) : ILabelPri
 
         printDocument.DefaultPageSettings.PaperSize = new PaperSize("OneByThreeLabel", labelPrintJob.LabelSize.Width, labelPrintJob.LabelSize.Height);
         printDocument.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
+        printDocument.OriginAtMargins = false;
+        printDocument.DefaultPageSettings.Landscape = false;
 
         printDocument.PrintPage += PrintLabelsHandler;
 
