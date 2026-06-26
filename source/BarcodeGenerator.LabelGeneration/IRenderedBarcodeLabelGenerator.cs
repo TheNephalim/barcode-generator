@@ -1,11 +1,7 @@
 ﻿// ***********************************************************************
-// Assembly          : ${$NAMESPACE$}
+// Assembly          : BarcodeGenerator.LabelGeneration
 // Author            : Robert Eberhart
 // Created           : 06-10-2026
-// ***********************************************************************
-// <copyright file="IRenderedBarcodeLabelGenerator.cs" company="Littoral Combat Ships">
-//     Copyright (c) 2026 Littoral Combat Ships. All rights reserved.
-// </copyright>
 // ***********************************************************************
 
 using BarcodeGenerator.Entities;
@@ -13,6 +9,7 @@ using BarcodeGenerator.Entities;
 namespace BarcodeGenerator.LabelGeneration;
 
 public interface IRenderedBarcodeLabelGenerator {
+
     /// <summary>
     /// Generates a list of rendered barcode labels from the provided collection of barcode labels.
     /// </summary>
