@@ -75,7 +75,24 @@ public class OneByThreeLabelRenderer : ILabelRenderer {
         graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighSpeed;
 
         var paddingX = (int)Math.Round(bounds.Width * 0.06);
-        var top = (int)Math.Round(bounds.Height * 0.10);
+        var top = (int)Math.Round(bounds.Height * 0.35);
+
+        var lotText = $"Lot: {label.Label.DatePurchased}";
+
+        using var lotFont = new Font("Arial", 8f, FontStyle.Bold, GraphicsUnit.Point);
+        using var textBrush = new SolidBrush(Color.Black);
+        using var stringFormat = new StringFormat {
+            Alignment = StringAlignment.Center,
+            LineAlignment = StringAlignment.Center
+        };
+
+        var lotBounds = new Rectangle(
+            bounds.Left + paddingX,
+            bounds.Top,
+            bounds.Width - (paddingX * 2),
+            (int)Math.Round(bounds.Height * 0.25));
+
+        graphics.DrawString(lotText, lotFont, textBrush, lotBounds, stringFormat);
 
         var barcodeBounds = new Rectangle(
             bounds.Left + paddingX,
@@ -86,6 +103,16 @@ public class OneByThreeLabelRenderer : ILabelRenderer {
         graphics.DrawImage(label.BarcodeImage, barcodeBounds);
     }
 
+    /// <summary>
+    /// Converts a measurement in inches to pixels based on the specified DPI (dots per inch).
+    /// </summary>
+    /// <param name="inches">The measurement in inches to be converted.</param>
+    /// <param name="dpi">The dots per inch (DPI) value used for the conversion.</param>
+    /// <returns>The equivalent measurement in pixels, rounded to the nearest integer.</returns>
+    /// <remarks>
+    /// This method is useful for translating physical dimensions into pixel dimensions
+    /// when rendering graphical elements at a specific resolution.
+    /// </remarks>
     private static int InchesToPixels(float inches, float dpi) {
         return (int)Math.Round(inches * dpi);
     }
