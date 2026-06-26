@@ -3,10 +3,6 @@
 // Author            : Robert Eberhart
 // Created           : 06-10-2026
 // ***********************************************************************
-// <copyright file="BarcodeLabelGenerator.cs" company="Littoral Combat Ships">
-//     Copyright (c) 2026 Littoral Combat Ships. All rights reserved.
-// </copyright>
-// ***********************************************************************
 
 using BarcodeGenerator.Entities;
 
