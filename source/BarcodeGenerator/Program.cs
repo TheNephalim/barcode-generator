@@ -1,4 +1,8 @@
 using Autofac;
+using Autofac.Builder;
+using Autofac.Features.Scanning;
+using BarcodeGenerator.AutofacConfiguration;
+using System.Reflection;
 
 namespace BarcodeGenerator;
 
@@ -23,6 +27,22 @@ internal static class Program {
         ApplicationConfiguration.Initialize();
 
         var builder = new ContainerBuilder();
+
+        var thisAssembly = Assembly.GetExecutingAssembly();
+        var assembly = typeof(ConfigureBarcodeGeneration).Assembly;
+        var executingAssembly =
+            builder.RegisterAssemblyTypes(thisAssembly)
+                .Where<object, ScanningActivatorData, DynamicRegistrationStyle>(t => t.Name.EndsWith("Form"))
+                .AsSelf()
+                .InstancePerDependency();
+
+        builder.RegisterType<BarcodeLabelGenerator>()
+            .AsSelf()
+            .InstancePerDependency();
+
+        builder.RegisterType<PriceLabelGenerator>()
+            .AsSelf()
+            .InstancePerDependency();
 
         ModuleRegistrar.Register(builder);
         FormRegistrar.Register(builder);
