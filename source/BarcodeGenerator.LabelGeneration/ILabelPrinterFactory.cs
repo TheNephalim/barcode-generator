@@ -1,11 +1,7 @@
 ﻿// ***********************************************************************
-// Assembly          : ${$NAMESPACE$}
+// Assembly          : BarcodeGenerator.LabelGeneration
 // Author            : Robert Eberhart
 // Created           : 06-11-2026
-// ***********************************************************************
-// <copyright file="ILabelPrinterFactory.cs" company="Littoral Combat Ships">
-//     Copyright (c) 2026 Littoral Combat Ships. All rights reserved.
-// </copyright>
 // ***********************************************************************
 
 using BarcodeGenerator.Entities;
@@ -13,6 +9,7 @@ using BarcodeGenerator.Entities;
 namespace BarcodeGenerator.LabelGeneration;
 
 public interface ILabelPrinterFactory {
+
     /// <summary>
     /// Retrieves the appropriate <see cref="ILabelPrinter"/> instance for the specified <see cref="LabelTemplateType"/>.
     /// </summary>
