@@ -1,11 +1,7 @@
 ﻿// ***********************************************************************
-// Assembly          : ${$NAMESPACE$}
+// Assembly          : BarcodeGenerator.Entities
 // Author            : Robert Eberhart
 // Created           : 06-11-2026
-// ***********************************************************************
-// <copyright file="LabelTemplateType.cs" company="Littoral Combat Ships">
-//     Copyright (c) 2026 Littoral Combat Ships. All rights reserved.
-// </copyright>
 // ***********************************************************************
 
 namespace BarcodeGenerator.Entities;
