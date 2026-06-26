@@ -25,6 +25,7 @@ Barcode Generator is a Windows Forms application built with .NET for generating 
 
 ```text
 PC-000123
+````
 
 - PC is the inventory source.
 - 000123 is the sequential identifier.
@@ -37,6 +38,3 @@ PC-000123
 - Price labels
 - Location labels
 - Label history
-License
-
-MIT
