@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BarcodeGenerator.Entities\BarcodeGenerator.Entities.csproj" />
     <ProjectReference Include="..\BarcodeGenerator.AutofacConfiguration\BarcodeGenerator.AutofacConfiguration.csproj" />
+    <ProjectReference Include="..\barcodegenerator.data\BarcodeGenerator.Data.csproj" />
   </ItemGroup>
 
 </Project>
