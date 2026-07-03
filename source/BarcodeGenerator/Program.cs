@@ -1,7 +1,7 @@
 using Autofac;
 using Autofac.Builder;
 using Autofac.Features.Scanning;
-using BarcodeGenerator.AutofacConfiguration;
+using BarcodeGenerator.Data.Database;
 using System.Reflection;
 
 namespace BarcodeGenerator;
@@ -29,12 +29,23 @@ internal static class Program {
         var builder = new ContainerBuilder();
 
         var thisAssembly = Assembly.GetExecutingAssembly();
-        var assembly = typeof(ConfigureBarcodeGeneration).Assembly;
-        var executingAssembly =
-            builder.RegisterAssemblyTypes(thisAssembly)
+        builder.RegisterAssemblyTypes(thisAssembly)
                 .Where<object, ScanningActivatorData, DynamicRegistrationStyle>(t => t.Name.EndsWith("Form"))
                 .AsSelf()
                 .InstancePerDependency();
+
+        builder.Register(_ => {
+            var folder = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "BarcodeGenerator");
+
+            Directory.CreateDirectory(folder);
+
+            var databasePath = Path.Combine(folder, "barcode-generator.db");
+            var connectionString = $"Data Source={databasePath}";
+            return new SqliteConnectionFactory(connectionString);
+        }).As<IDbConnectionFactory>()
+            .SingleInstance();
 
         builder.RegisterType<BarcodeLabelGenerator>()
             .AsSelf()
@@ -44,10 +55,17 @@ internal static class Program {
             .AsSelf()
             .InstancePerDependency();
 
+        builder.RegisterType<DatabaseInitializer>()
+            .AsSelf()
+            .InstancePerDependency();
+
         ModuleRegistrar.Register(builder);
         FormRegistrar.Register(builder);
 
         using var container = builder.Build();
+
+        var initializer = container.Resolve<DatabaseInitializer>();
+        initializer.Initialize();
 
         Application.Run(container.Resolve<MainForm>());
     }
