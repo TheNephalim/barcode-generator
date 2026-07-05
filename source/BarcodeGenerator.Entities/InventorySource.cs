@@ -34,7 +34,7 @@ public class InventorySource {
     /// <remarks>
     /// This property is used to uniquely identify a source within the BarcodeGenerator system.
     /// </remarks>
-    public Guid Id { get; set; }
+    public long Id { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the source is active.
