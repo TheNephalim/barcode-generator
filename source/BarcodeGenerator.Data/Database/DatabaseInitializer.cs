@@ -3,10 +3,6 @@
 // Author            : Robert Eberhart
 // Created           : 07-03-2026
 // ***********************************************************************
-// <copyright file="DatabaseInitializer.cs" company="Littoral Combat Ships">
-//     Copyright (c) 2026 Littoral Combat Ships. All rights reserved.
-// </copyright>
-// ***********************************************************************
 
 using Dapper;
 using System.Data;
@@ -61,6 +57,41 @@ public sealed class DatabaseInitializer {
     }
 
     /// <summary>
+    /// Creates the necessary database tables if they do not already exist.
+    /// </summary>
+    /// <param name="connection">
+    /// An open <see cref="IDbConnection"/> used to execute the SQL commands for creating the tables.
+    /// </param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="connection"/> is <c>null</c>.
+    /// </exception>
+    /// <exception cref="Exception">
+    /// Thrown if there is an error during the execution of the SQL commands.
+    /// </exception>
+    /// <remarks>
+    /// This method ensures that the database schema includes the required tables, such as <c>InventorySource</c>
+    /// and <c>BarcodeSequence</c>. It uses SQL commands to create these tables if they do not already exist.
+    /// </remarks>
+    private static void CreateDatabaseTables(IDbConnection connection) {
+        const string sql = """
+                           CREATE TABLE IF NOT EXISTS InventorySource (
+                            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            Code TEXT NOT NULL UNIQUE,
+                            Name TEXT NOT NULL,
+                            IsActive INTEGER NOT NULL DEFAULT 1
+                           );
+
+                           CREATE TABLE IF NOT EXISTS BarcodeSequence (
+                            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            SourceCode TEXT NOT NULL UNIQUE,
+                            LastNumber INTEGER NOT NULL DEFAULT 0
+                           );
+                           """;
+
+        connection.Execute(sql);
+    }
+
+    /// <summary>
     /// Seeds the initial inventory sources into the database if they do not already exist.
     /// </summary>
     /// <param name="connection">
@@ -76,7 +107,7 @@ public sealed class DatabaseInitializer {
     /// <exception cref="InvalidOperationException">
     /// Thrown if the database connection cannot be established.
     /// </exception>
-    public void SeedInventorySources(IDbConnection? connection) {
+    private void SeedInventorySources(IDbConnection? connection) {
         if (connection == null) {
             throw new ArgumentNullException(nameof(connection));
         }
@@ -110,40 +141,5 @@ public sealed class DatabaseInitializer {
 
         // Execute the seeding operations
         connection.Execute(insertSql, initialInventorySources);
-    }
-
-    /// <summary>
-    /// Creates the necessary database tables if they do not already exist.
-    /// </summary>
-    /// <param name="connection">
-    /// An open <see cref="IDbConnection"/> used to execute the SQL commands for creating the tables.
-    /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// Thrown when <paramref name="connection"/> is <c>null</c>.
-    /// </exception>
-    /// <exception cref="Exception">
-    /// Thrown if there is an error during the execution of the SQL commands.
-    /// </exception>
-    /// <remarks>
-    /// This method ensures that the database schema includes the required tables, such as <c>InventorySource</c>
-    /// and <c>BarcodeSequence</c>. It uses SQL commands to create these tables if they do not already exist.
-    /// </remarks>
-    private static void CreateDatabaseTables(IDbConnection connection) {
-        const string sql = """
-                           CREATE TABLE IF NOT EXISTS InventorySource (
-                            Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                            Code TEXT NOT NULL UNIQUE,
-                            Name TEXT NOT NULL,
-                            IsActive INTEGER NOT NULL DEFAULT 1
-                           );
-
-                           CREATE TABLE IF NOT EXISTS BarcodeSequence (
-                            Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                            SourceCode TEXT NOT NULL UNIQUE,
-                            LastNumber INTEGER NOT NULL DEFAULT 0
-                           );
-                           """;
-
-        connection.Execute(sql);
     }
 }
