@@ -39,6 +39,7 @@ partial class BarcodeLabelGenerator {
         nudCopyNumber = new NumericUpDown();
         chkIsCollated = new CheckBox();
         chkSuppressLastNumberUpdate = new CheckBox();
+        lblPurchaseDate = new Label();
         ((System.ComponentModel.ISupportInitialize)nudStartNumber).BeginInit();
         ((System.ComponentModel.ISupportInitialize)nudEndNumber).BeginInit();
         ((System.ComponentModel.ISupportInitialize)nudCopyNumber).BeginInit();
@@ -46,7 +47,7 @@ partial class BarcodeLabelGenerator {
         // 
         // nudStartNumber
         // 
-        nudStartNumber.Location = new Point(430, 54);
+        nudStartNumber.Location = new Point(475, 34);
         nudStartNumber.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
         nudStartNumber.Name = "nudStartNumber";
         nudStartNumber.Size = new Size(120, 23);
@@ -54,7 +55,7 @@ partial class BarcodeLabelGenerator {
         // 
         // nudEndNumber
         // 
-        nudEndNumber.Location = new Point(590, 54);
+        nudEndNumber.Location = new Point(646, 34);
         nudEndNumber.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
         nudEndNumber.Name = "nudEndNumber";
         nudEndNumber.Size = new Size(120, 23);
@@ -63,7 +64,7 @@ partial class BarcodeLabelGenerator {
         // label1
         // 
         label1.AutoSize = true;
-        label1.Location = new Point(37, 14);
+        label1.Location = new Point(24, 24);
         label1.Name = "label1";
         label1.Size = new Size(77, 15);
         label1.TabIndex = 3;
@@ -72,7 +73,7 @@ partial class BarcodeLabelGenerator {
         // label2
         // 
         label2.AutoSize = true;
-        label2.Location = new Point(430, 36);
+        label2.Location = new Point(475, 16);
         label2.Name = "label2";
         label2.Size = new Size(98, 15);
         label2.TabIndex = 4;
@@ -81,7 +82,7 @@ partial class BarcodeLabelGenerator {
         // label3
         // 
         label3.AutoSize = true;
-        label3.Location = new Point(590, 36);
+        label3.Location = new Point(646, 16);
         label3.Name = "label3";
         label3.Size = new Size(94, 15);
         label3.TabIndex = 5;
@@ -89,13 +90,13 @@ partial class BarcodeLabelGenerator {
         // 
         // monthCalendar1
         // 
-        monthCalendar1.Location = new Point(179, 36);
+        monthCalendar1.Location = new Point(214, 48);
         monthCalendar1.Name = "monthCalendar1";
         monthCalendar1.TabIndex = 7;
         // 
         // btnGenerate
         // 
-        btnGenerate.Location = new Point(490, 194);
+        btnGenerate.Location = new Point(574, 194);
         btnGenerate.Name = "btnGenerate";
         btnGenerate.Size = new Size(89, 38);
         btnGenerate.TabIndex = 8;
@@ -105,7 +106,7 @@ partial class BarcodeLabelGenerator {
         // 
         // btnCancel
         // 
-        btnCancel.Location = new Point(590, 194);
+        btnCancel.Location = new Point(672, 194);
         btnCancel.Name = "btnCancel";
         btnCancel.Size = new Size(94, 38);
         btnCancel.TabIndex = 9;
@@ -116,15 +117,15 @@ partial class BarcodeLabelGenerator {
         // cmboSources
         // 
         cmboSources.FormattingEnabled = true;
-        cmboSources.Location = new Point(39, 34);
+        cmboSources.Location = new Point(24, 48);
         cmboSources.Name = "cmboSources";
-        cmboSources.Size = new Size(121, 23);
+        cmboSources.Size = new Size(155, 23);
         cmboSources.TabIndex = 10;
         // 
         // label4
         // 
         label4.AutoSize = true;
-        label4.Location = new Point(430, 89);
+        label4.Location = new Point(475, 74);
         label4.Name = "label4";
         label4.Size = new Size(67, 15);
         label4.TabIndex = 11;
@@ -132,7 +133,7 @@ partial class BarcodeLabelGenerator {
         // 
         // nudCopyNumber
         // 
-        nudCopyNumber.Location = new Point(430, 112);
+        nudCopyNumber.Location = new Point(475, 97);
         nudCopyNumber.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
         nudCopyNumber.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
         nudCopyNumber.Name = "nudCopyNumber";
@@ -143,7 +144,7 @@ partial class BarcodeLabelGenerator {
         // chkIsCollated
         // 
         chkIsCollated.AutoSize = true;
-        chkIsCollated.Location = new Point(529, 112);
+        chkIsCollated.Location = new Point(574, 97);
         chkIsCollated.Name = "chkIsCollated";
         chkIsCollated.Size = new Size(148, 19);
         chkIsCollated.TabIndex = 13;
@@ -153,19 +154,29 @@ partial class BarcodeLabelGenerator {
         // chkSuppressLastNumberUpdate
         // 
         chkSuppressLastNumberUpdate.AutoSize = true;
-        chkSuppressLastNumberUpdate.Location = new Point(529, 137);
+        chkSuppressLastNumberUpdate.Location = new Point(574, 122);
         chkSuppressLastNumberUpdate.Name = "chkSuppressLastNumberUpdate";
         chkSuppressLastNumberUpdate.Size = new Size(209, 19);
         chkSuppressLastNumberUpdate.TabIndex = 14;
         chkSuppressLastNumberUpdate.Text = "Do not update last printed number";
         chkSuppressLastNumberUpdate.UseVisualStyleBackColor = true;
         // 
+        // lblPurchaseDate
+        // 
+        lblPurchaseDate.AutoSize = true;
+        lblPurchaseDate.Location = new Point(214, 24);
+        lblPurchaseDate.Name = "lblPurchaseDate";
+        lblPurchaseDate.Size = new Size(82, 15);
+        lblPurchaseDate.TabIndex = 16;
+        lblPurchaseDate.Text = "Purchase Date";
+        // 
         // BarcodeLabelGenerator
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         BackColor = Color.DarkSeaGreen;
-        ClientSize = new Size(800, 279);
+        ClientSize = new Size(800, 257);
+        Controls.Add(lblPurchaseDate);
         Controls.Add(chkSuppressLastNumberUpdate);
         Controls.Add(chkIsCollated);
         Controls.Add(nudCopyNumber);
@@ -203,4 +214,5 @@ partial class BarcodeLabelGenerator {
     private NumericUpDown nudCopyNumber;
     private CheckBox chkIsCollated;
     private CheckBox chkSuppressLastNumberUpdate;
+    private Label lblPurchaseDate;
 }
