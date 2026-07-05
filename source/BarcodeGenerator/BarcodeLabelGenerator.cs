@@ -1,4 +1,5 @@
-﻿using BarcodeGenerator.Entities;
+﻿using BarcodeGenerator.Data.Repositories;
+using BarcodeGenerator.Entities;
 using BarcodeGenerator.LabelGeneration;
 
 namespace BarcodeGenerator;
@@ -16,25 +17,7 @@ public partial class BarcodeLabelGenerator : Form {
     private readonly IBarcodeLabelGenerator _barcodeLabelGenerator;
     private readonly ILabelPrinterFactory _printerFactory;
     private readonly IRenderedBarcodeLabelGenerator _renderedBarcodeLabelGenerator;
-    private readonly Dictionary<string, string> _sources = new() {
-        { "ETA", "Early Times Auction" },
-        { "ES", "Estate Sale" },
-        { "FB", "Facebook Marketplace" },
-        { "FGS", "Fredericksburg Garage Sale"},
-        { "FM", "Fred Melby" },
-        { "GW", "Goodwill" },
-        { "JW", "Jim Wood" },
-        { "LH", "Linda Hirschberg" },
-        { "MF", "Massaponax Flea Market"},
-        { "MNDO", "Mondo" },
-        { "NBC", "Newbury Comic Shop"},
-        { "OR", "Otto Richter" },
-        { "OT", "Other" },
-        { "PC", "Personal Collection" },
-        { "RA", "Rasmus Auctions"},
-        { "TS", "Taylor Swift" },
-        { "VCV", "VC Vinyl"}
-    };
+    private readonly IInventorySourceRepository _sourceRepository;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MainForm"/> class.
@@ -43,13 +26,14 @@ public partial class BarcodeLabelGenerator : Form {
     /// This constructor sets up the main form of the Barcode Generator application
     /// by initializing its components and preparing the user interface for interaction.
     /// </remarks>
-    public BarcodeLabelGenerator(IRenderedBarcodeLabelGenerator renderedBarcodeLabelGenerator, IBarcodeLabelGenerator barcodeLabelGenerator, ILabelPrinterFactory printerFactory) {
+    public BarcodeLabelGenerator(IRenderedBarcodeLabelGenerator renderedBarcodeLabelGenerator, IBarcodeLabelGenerator barcodeLabelGenerator, ILabelPrinterFactory printerFactory, IInventorySourceRepository sourceRepository) {
         InitializeComponent();
 
         _renderedBarcodeLabelGenerator =
             renderedBarcodeLabelGenerator ?? throw new ArgumentNullException(nameof(renderedBarcodeLabelGenerator));
         _barcodeLabelGenerator = barcodeLabelGenerator ?? throw new ArgumentNullException(nameof(barcodeLabelGenerator));
         _printerFactory = printerFactory ?? throw new ArgumentNullException(nameof(printerFactory));
+        _sourceRepository = sourceRepository ?? throw new ArgumentNullException(nameof(sourceRepository));
     }
 
     /// <summary>
@@ -77,9 +61,16 @@ public partial class BarcodeLabelGenerator : Form {
         return false;
     }
 
+    /// <summary>
+    /// Handles the <c>Click</c> event of the <c>btnCancel</c> button.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
+    /// <remarks>
+    /// This method closes the current form when the cancel button is clicked.
+    /// </remarks>
     private void btnCancel_Click(object sender, EventArgs e) {
         this.Close();
-        Application.Exit();
     }
 
     /// <summary>
@@ -173,23 +164,42 @@ public partial class BarcodeLabelGenerator : Form {
     /// This method initializes the default values for the numeric up-down controls and the source code text box.
     /// Additionally, it displays a welcome message to the user when the form is loaded.
     /// </remarks>
-    private void MainForm_Load(object sender, EventArgs e) {
-        InitializeNumericControls();
+    private async void MainForm_Load(object sender, EventArgs e) {
+        try {
+            InitializeNumericControls();
 
-        PopulateSourceDropdown();
+            await PopulateSourceDropdown();
+        } catch (Exception exception) {
+            MessageBox.Show(
+                exception.Message,
+                "Unable to load inventory sources",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error
+            );
+
+            Close();
+        }
     }
 
     /// <summary>
-    /// Populates the source dropdown with a list of predefined sources.
+    /// Populates the source dropdown with available inventory sources.
     /// </summary>
     /// <remarks>
-    /// This method binds the <see cref="ComboBox"/> control <see cref="cmboSources"/> to a list of sources
-    /// defined in the <see cref="_sources"/> dictionary. The display member is set to the source description,
-    /// and the value member is set to the source key.
+    /// This method retrieves a list of inventory sources asynchronously from the
+    /// <see cref="IInventorySourceRepository"/> and binds them to the <see cref="ComboBox"/> control
+    /// <see cref="cmboSources"/>. The dropdown is configured to display the source code as the display member
+    /// and use the source ID as the value member.
     /// </remarks>
-    private void PopulateSourceDropdown() {
-        cmboSources.DataSource = _sources.ToList();
-        cmboSources.DisplayMember = "Value";
-        cmboSources.ValueMember = "Key";
+    /// <returns>
+    /// A task that represents the asynchronous operation of populating the dropdown.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if there is an issue retrieving the inventory sources from the repository.
+    /// </exception>
+    private async Task PopulateSourceDropdown() {
+        var sources = await _sourceRepository.GetAllAsync();
+        cmboSources.DataSource = sources.ToList();
+        cmboSources.DisplayMember = nameof(InventorySource.Name);
+        cmboSources.ValueMember = nameof(InventorySource.Code);
     }
 }
