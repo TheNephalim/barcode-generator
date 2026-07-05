@@ -2,6 +2,7 @@ using Autofac;
 using Autofac.Builder;
 using Autofac.Features.Scanning;
 using BarcodeGenerator.Data.Database;
+using BarcodeGenerator.Data.Repositories;
 using System.Reflection;
 
 namespace BarcodeGenerator;
@@ -53,6 +54,10 @@ internal static class Program {
 
         builder.RegisterType<PriceLabelGenerator>()
             .AsSelf()
+            .InstancePerDependency();
+
+        builder.RegisterType<InventorySourceRepository>()
+            .As<IInventorySourceRepository>()
             .InstancePerDependency();
 
         builder.RegisterType<DatabaseInitializer>()
