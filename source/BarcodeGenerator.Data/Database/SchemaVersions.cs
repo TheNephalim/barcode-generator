@@ -3,10 +3,13 @@
 // Author            : Robert Eberhart
 // Created           : 07-03-2026
 // ***********************************************************************
-// <copyright file="SchemaVersions.cs" company="Littoral Combat Ships">
-//     Copyright (c) 2026 Littoral Combat Ships. All rights reserved.
-// </copyright>
-// ***********************************************************************
 namespace BarcodeGenerator.Data.Database;
 
+/// <summary>
+/// Represents the schema versions used in the database for the BarcodeGenerator application.
+/// </summary>
+/// <remarks>
+/// This class is part of the <c>BarcodeGenerator.Data.Database</c> namespace and is used to manage or reference
+/// the versions of database schemas.
+/// </remarks>
 public class SchemaVersions { }
