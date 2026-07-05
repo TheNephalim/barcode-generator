@@ -3,10 +3,6 @@
 // Author            : Robert Eberhart
 // Created           : 07-03-2026
 // ***********************************************************************
-// <copyright file="SqliteConnectionFactory.cs" company="Littoral Combat Ships">
-//     Copyright (c) 2026 Littoral Combat Ships. All rights reserved.
-// </copyright>
-// ***********************************************************************
 
 using Microsoft.Data.Sqlite;
 using System.Data;
