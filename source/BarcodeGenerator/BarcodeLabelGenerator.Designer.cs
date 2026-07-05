@@ -38,6 +38,7 @@ partial class BarcodeLabelGenerator {
         label4 = new Label();
         nudCopyNumber = new NumericUpDown();
         chkIsCollated = new CheckBox();
+        chkSuppressLastNumberUpdate = new CheckBox();
         ((System.ComponentModel.ISupportInitialize)nudStartNumber).BeginInit();
         ((System.ComponentModel.ISupportInitialize)nudEndNumber).BeginInit();
         ((System.ComponentModel.ISupportInitialize)nudCopyNumber).BeginInit();
@@ -94,7 +95,7 @@ partial class BarcodeLabelGenerator {
         // 
         // btnGenerate
         // 
-        btnGenerate.Location = new Point(522, 160);
+        btnGenerate.Location = new Point(490, 194);
         btnGenerate.Name = "btnGenerate";
         btnGenerate.Size = new Size(89, 38);
         btnGenerate.TabIndex = 8;
@@ -104,7 +105,7 @@ partial class BarcodeLabelGenerator {
         // 
         // btnCancel
         // 
-        btnCancel.Location = new Point(641, 160);
+        btnCancel.Location = new Point(590, 194);
         btnCancel.Name = "btnCancel";
         btnCancel.Size = new Size(94, 38);
         btnCancel.TabIndex = 9;
@@ -149,12 +150,23 @@ partial class BarcodeLabelGenerator {
         chkIsCollated.Text = "Group Copies Together";
         chkIsCollated.UseVisualStyleBackColor = true;
         // 
+        // chkSuppressLastNumberUpdate
+        // 
+        chkSuppressLastNumberUpdate.AutoSize = true;
+        chkSuppressLastNumberUpdate.Location = new Point(529, 137);
+        chkSuppressLastNumberUpdate.Name = "chkSuppressLastNumberUpdate";
+        chkSuppressLastNumberUpdate.Size = new Size(209, 19);
+        chkSuppressLastNumberUpdate.TabIndex = 14;
+        chkSuppressLastNumberUpdate.Text = "Do not update last printed number";
+        chkSuppressLastNumberUpdate.UseVisualStyleBackColor = true;
+        // 
         // BarcodeLabelGenerator
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         BackColor = Color.DarkSeaGreen;
-        ClientSize = new Size(800, 239);
+        ClientSize = new Size(800, 279);
+        Controls.Add(chkSuppressLastNumberUpdate);
         Controls.Add(chkIsCollated);
         Controls.Add(nudCopyNumber);
         Controls.Add(label4);
@@ -190,4 +202,5 @@ partial class BarcodeLabelGenerator {
     private Label label4;
     private NumericUpDown nudCopyNumber;
     private CheckBox chkIsCollated;
+    private CheckBox chkSuppressLastNumberUpdate;
 }
