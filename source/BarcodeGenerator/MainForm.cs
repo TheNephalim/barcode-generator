@@ -28,14 +28,43 @@ public partial class MainForm : Form {
         _pricingLabelGeneratorFormFactory = pricingLabelGeneratorFormFactory ?? throw new ArgumentNullException(nameof(pricingLabelGeneratorFormFactory));
     }
 
+    /// <summary>
+    /// Handles the <see cref="Button.Click"/> event for the "Launch Barcode Label Generator" button.
+    /// </summary>
+    /// <param name="sender">The source of the event, typically the button that was clicked.</param>
+    /// <param name="e">An <see cref="EventArgs"/> instance containing the event data.</param>
+    /// <remarks>
+    /// This method initializes and displays the Barcode Label Generator form as a modal dialog.
+    /// </remarks>
     private void btnLaunchBarcodeLabelGenerator_Click(object sender, EventArgs e) {
         var form = _barcodeLabelGeneratorFactory();
         form.ShowDialog(this);
     }
 
+    /// <summary>
+    /// Handles the click event for the "Launch Price Label Generator" button.
+    /// </summary>
+    /// <param name="sender">The source of the event, typically the button that was clicked.</param>
+    /// <param name="e">An <see cref="EventArgs"/> instance containing the event data.</param>
+    /// <remarks>
+    /// This method creates an instance of the price label generator form using the factory
+    /// and displays it as a modal dialog.
+    /// </remarks>
     private void btnLaunchPriceLabelGenerator_Click(object sender, EventArgs e) {
         var form = _pricingLabelGeneratorFormFactory();
         form.ShowDialog(this);
+    }
+
+    /// <summary>
+    /// Handles the <c>Click</c> event of the <c>exitToolStripMenuItem</c>.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
+    /// <remarks>
+    /// This method closes the current form when the exit menu item is clicked.
+    /// </remarks>
+    private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
+        Close();
     }
 
     /// <summary>
