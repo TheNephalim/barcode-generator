@@ -48,6 +48,26 @@ public class InventorySource {
     public bool IsActive { get; set; }
 
     /// <summary>
+    /// Gets or sets the last printed number associated with this inventory source.
+    /// </summary>
+    /// <remarks>
+    /// This property is used to track the most recent number that was printed for this inventory source,
+    /// which can be useful for maintaining sequential numbering or identifying the last printed item.
+    /// </remarks>
+    public int LastPrintedNumber { get; set; }
+
+    /// <summary>
+    /// Gets or sets the date and time of the last purchase associated with this inventory source.
+    /// </summary>
+    /// <value>
+    /// A nullable <see cref="DateTime"/> representing the last purchase date, or <c>null</c> if no purchase has been recorded.
+    /// </value>
+    /// <remarks>
+    /// This property is useful for tracking the most recent procurement activity for the inventory source.
+    /// </remarks>
+    public DateTime? LastPurchaseDate { get; set; }
+
+    /// <summary>
     /// Gets or sets the name of the source.
     /// </summary>
     /// <value>
