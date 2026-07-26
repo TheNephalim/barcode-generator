@@ -48,14 +48,6 @@ internal static class Program {
         }).As<IDbConnectionFactory>()
             .SingleInstance();
 
-        builder.RegisterType<BarcodeLabelGenerator>()
-            .AsSelf()
-            .InstancePerDependency();
-
-        builder.RegisterType<PriceLabelGenerator>()
-            .AsSelf()
-            .InstancePerDependency();
-
         builder.RegisterType<InventorySourceRepository>()
             .As<IInventorySourceRepository>()
             .InstancePerDependency();
