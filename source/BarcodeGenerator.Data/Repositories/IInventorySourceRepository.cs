@@ -17,6 +17,8 @@ namespace BarcodeGenerator.Data.Repositories;
 /// </remarks>
 public interface IInventorySourceRepository {
 
+    Task AddSourceAsync(InventorySource source);
+
     /// <summary>
     /// Retrieves all inventory sources from the database.
     /// </summary>
@@ -28,4 +30,21 @@ public interface IInventorySourceRepository {
     /// Thrown if there is an issue with the database connection or query execution.
     /// </exception>
     Task<IReadOnlyList<InventorySource>> GetAllAsync();
+
+    /// <summary>
+    /// Updates an existing inventory source in the database.
+    /// </summary>
+    /// <param name="source">
+    /// The <see cref="InventorySource"/> object containing the updated details of the inventory source.
+    /// </param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if the <paramref name="source"/> parameter is <c>null</c>.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if there is an issue with the database connection or the update operation fails.
+    /// </exception>
+    Task UpdateSourceAsync(InventorySource source);
 }
