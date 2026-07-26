@@ -143,8 +143,9 @@ public partial class BarcodeLabelGenerator : Form {
         if (cmboSources.SelectedItem is InventorySource inventorySource) {
             var code = inventorySource.Code;
             var lastPrintedNumber = inventorySource.LastPrintedNumber;
-            nudStartNumber.Value = lastPrintedNumber;
-            nudEndNumber.Value = lastPrintedNumber + 100;
+            var startNumber = lastPrintedNumber + 1;
+            nudStartNumber.Value = startNumber;
+            nudEndNumber.Value = startNumber + 99;
             monthCalendar1.SetDate(inventorySource.LastPurchaseDate ?? DateTime.Now);
         } else {
             MessageBox.Show("Invalid selection.  Please select a valid source.", "Error", MessageBoxButtons.OK,
