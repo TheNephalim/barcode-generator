@@ -67,21 +67,21 @@ public class OneByThreeLabelRenderer : ILabelRenderer {
 
         graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
         graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-        graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+        graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.None;
         graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighSpeed;
 
         var paddingX = (int)Math.Round(bounds.Width * 0.06);
-        var top = (int)Math.Round(bounds.Height * 0.35);
-
-        var lotText = $"Lot: {label.Label.DatePurchased}";
+        //var top = (int)Math.Round(bounds.Height * 0.35);
 
         using var lotFont = new Font("Arial", 8f, FontStyle.Bold, GraphicsUnit.Point);
+        using var barcodeTextFont = new Font("Arial", 8f, FontStyle.Bold, GraphicsUnit.Point);
         using var textBrush = new SolidBrush(Color.Black);
-        using var stringFormat = new StringFormat {
-            Alignment = StringAlignment.Center,
-            LineAlignment = StringAlignment.Center
-        };
 
+        using var stringFormat = new StringFormat();
+        stringFormat.Alignment = StringAlignment.Center;
+        stringFormat.LineAlignment = StringAlignment.Center;
+
+        var lotText = $"Lot: {label.Label.DatePurchased}";
         var lotBounds = new Rectangle(
             bounds.Left + paddingX,
             bounds.Top,
@@ -90,13 +90,36 @@ public class OneByThreeLabelRenderer : ILabelRenderer {
 
         graphics.DrawString(lotText, lotFont, textBrush, lotBounds, stringFormat);
 
+        var barcodeTop =
+            bounds.Top + (int)Math.Round(bounds.Height * 0.30);
+
+        var barcodeHeight =
+            (int)Math.Round(bounds.Height * 0.45);
+
         var barcodeBounds = new Rectangle(
             bounds.Left + paddingX,
-            bounds.Top + top,
+            barcodeTop,
             bounds.Width - (paddingX * 2),
-            (int)Math.Round(bounds.Height * 0.55));
+            barcodeHeight);
 
-        graphics.DrawImage(label.BarcodeImage, barcodeBounds);
+        graphics.DrawImage(
+            label.BarcodeImage,
+            barcodeBounds,
+            new Rectangle(0, 0, label.BarcodeImage.Width,
+                label.BarcodeImage.Height), GraphicsUnit.Pixel);
+
+        var barcodeTextBounds = new Rectangle(
+            bounds.Left + paddingX,
+            barcodeBounds.Bottom,
+            bounds.Width - (paddingX * 2),
+            (int)Math.Round(bounds.Height * 0.20));
+
+        graphics.DrawString(
+            label.DisplayText,
+            barcodeTextFont,
+            textBrush,
+            barcodeTextBounds,
+            stringFormat);
     }
 
     /// <summary>
