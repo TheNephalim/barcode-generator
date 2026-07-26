@@ -4,7 +4,6 @@
 // Created           : 06-10-2026
 // ***********************************************************************
 
-using System.Drawing;
 using ZXing;
 using ZXing.Common;
 using ZXing.Windows.Compatibility;
@@ -26,8 +25,10 @@ public sealed class BarcodeImageGenerator : IBarcodeImageGenerator {
     /// Generates a Code 128 barcode image as a <see cref="Bitmap"/>.
     /// </summary>
     /// <param name="barcodeValue">
-    /// The value to encode in the barcode. This must not be <see langword="null"/> or empty.
+    ///     The value to encode in the barcode. This must not be <see langword="null"/> or empty.
     /// </param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
     /// <returns>
     /// A <see cref="Bitmap"/> representing the generated Code 128 barcode.
     /// </returns>
@@ -37,18 +38,18 @@ public sealed class BarcodeImageGenerator : IBarcodeImageGenerator {
     /// <remarks>
     /// This method uses the ZXing library to generate a Code 128 barcode image with predefined dimensions and margins.
     /// </remarks>
-    public Bitmap GenerateCode128(string barcodeValue) {
-        if (string.IsNullOrEmpty(barcodeValue)) {
-            throw new ArgumentException("Barcode value is required", nameof(barcodeValue));
-        }
+    public Bitmap GenerateCode128(string barcodeValue, int width, int height) {
+        ArgumentNullException.ThrowIfNullOrEmpty(barcodeValue);
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(width, 0);
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(height, 0);
 
         var writer = new BarcodeWriter<Bitmap>() {
             Format = BarcodeFormat.CODE_128,
             Options = new EncodingOptions() {
-                Height = 80,
-                Width = 300,
-                Margin = 10,
-                PureBarcode = false
+                Height = height,
+                Width = width,
+                Margin = 20,
+                PureBarcode = true
             },
             Renderer = new BitmapRenderer()
         };
@@ -73,7 +74,7 @@ public sealed class BarcodeImageGenerator : IBarcodeImageGenerator {
     /// to the specified file path. The barcode is created with predefined dimensions and margins.
     /// </remarks>
     public void SaveCode128Png(string barcodeValue, string filePath) {
-        using var bitmap = GenerateCode128(barcodeValue);
+        using var bitmap = GenerateCode128(barcodeValue, 1200, 240);
         bitmap.Save(filePath, System.Drawing.Imaging.ImageFormat.Png);
     }
 }
