@@ -9,6 +9,7 @@ namespace BarcodeGenerator;
 /// </remarks>
 public partial class MainForm : Form {
     private readonly Func<BarcodeLabelGenerator> _barcodeLabelGeneratorFactory;
+    private readonly Func<InventorySourceMaintenance> _inventorySourceMaintenanceFactory;
     private readonly Func<PriceLabelGenerator> _pricingLabelGeneratorFormFactory;
 
     /// <summary>
@@ -20,12 +21,13 @@ public partial class MainForm : Form {
     /// </remarks>
     public MainForm(
         Func<BarcodeLabelGenerator> barcodeLabelGeneratorFactory,
-        Func<PriceLabelGenerator> pricingLabelGeneratorFormFactory
-        ) {
+        Func<PriceLabelGenerator> pricingLabelGeneratorFormFactory,
+        Func<InventorySourceMaintenance> inventorySourceMaintenanceFactory) {
         InitializeComponent();
 
         _barcodeLabelGeneratorFactory = barcodeLabelGeneratorFactory ?? throw new ArgumentNullException(nameof(barcodeLabelGeneratorFactory));
         _pricingLabelGeneratorFormFactory = pricingLabelGeneratorFormFactory ?? throw new ArgumentNullException(nameof(pricingLabelGeneratorFormFactory));
+        _inventorySourceMaintenanceFactory = inventorySourceMaintenanceFactory ?? throw new ArgumentNullException(nameof(inventorySourceMaintenanceFactory));
     }
 
     /// <summary>
@@ -65,6 +67,11 @@ public partial class MainForm : Form {
     /// </remarks>
     private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
         Close();
+    }
+
+    private void inventorySourcesToolStripMenuItem_Click(object sender, EventArgs e) {
+        var form = _inventorySourceMaintenanceFactory();
+        form.ShowDialog(this);
     }
 
     /// <summary>
