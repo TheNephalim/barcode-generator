@@ -91,6 +91,7 @@ partial class BarcodeLabelGenerator {
         // monthCalendar1
         // 
         monthCalendar1.Location = new Point(214, 48);
+        monthCalendar1.MaxSelectionCount = 1;
         monthCalendar1.Name = "monthCalendar1";
         monthCalendar1.TabIndex = 7;
         // 
@@ -121,6 +122,7 @@ partial class BarcodeLabelGenerator {
         cmboSources.Name = "cmboSources";
         cmboSources.Size = new Size(155, 23);
         cmboSources.TabIndex = 10;
+        cmboSources.SelectedIndexChanged += cmboSources_SelectedIndexChanged;
         // 
         // label4
         // 
