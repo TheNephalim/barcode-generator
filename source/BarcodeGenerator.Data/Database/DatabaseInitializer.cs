@@ -74,11 +74,14 @@ public sealed class DatabaseInitializer {
     /// </remarks>
     private static void CreateDatabaseTables(IDbConnection connection) {
         const string sql = """
-                           CREATE TABLE IF NOT EXISTS InventorySource (
-                            Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                            Code TEXT NOT NULL UNIQUE,
-                            Name TEXT NOT NULL,
-                            IsActive INTEGER NOT NULL DEFAULT 1
+                           CREATE TABLE IF NOT EXISTS InventorySource
+                           (
+                               Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                               Code TEXT NOT NULL UNIQUE,
+                               Name TEXT NOT NULL,
+                               IsActive INTEGER NOT NULL DEFAULT 1,
+                               LastPrintedNumber INTEGER NOT NULL DEFAULT 0,
+                               LastPurchaseDate TEXT NULL
                            );
 
                            CREATE TABLE IF NOT EXISTS BarcodeSequence (
