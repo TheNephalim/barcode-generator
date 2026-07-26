@@ -32,5 +32,18 @@ public static class FormRegistrar {
             .RegisterType<MainForm>()
             .AsSelf()
             .InstancePerDependency();
+
+        builder
+            .RegisterType<InventorySourceMaintenance>()
+            .AsSelf()
+            .InstancePerDependency();
+
+        builder.RegisterType<BarcodeLabelGenerator>()
+            .AsSelf()
+            .InstancePerDependency();
+
+        builder.RegisterType<PriceLabelGenerator>()
+            .AsSelf()
+            .InstancePerDependency();
     }
 }
