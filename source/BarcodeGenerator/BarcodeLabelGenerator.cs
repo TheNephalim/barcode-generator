@@ -2,6 +2,8 @@
 using BarcodeGenerator.Entities;
 using BarcodeGenerator.LabelGeneration;
 
+// ReSharper disable LocalizableElement
+
 namespace BarcodeGenerator;
 
 /// <summary>
@@ -116,6 +118,38 @@ public partial class BarcodeLabelGenerator : Form {
         labelPrinter.Print(printJob);
 
         MessageBox.Show("Generate!", "Information", MessageBoxButtons.OKCancel);
+    }
+
+    /// <summary>
+    /// Handles the <see cref="ComboBox.SelectedIndexChanged"/> event for the <c>cmboSources</c> control.
+    /// </summary>
+    /// <param name="sender">The source of the event, typically the <c>cmboSources</c> control.</param>
+    /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
+    /// <remarks>
+    /// This method ensures thread safety by invoking itself on the UI thread if required. It validates the selected item
+    /// in the <c>cmboSources</c> control and displays appropriate messages if no valid selection is made.
+    /// </remarks>
+    private void cmboSources_SelectedIndexChanged(object sender, EventArgs e) {
+        if (InvokeRequired) {
+            Invoke(new Action(() => cmboSources_SelectedIndexChanged(sender, e)));
+            return;
+        }
+
+        if (cmboSources.Items.Count == 0) {
+            MessageBox.Show("No sources available to select", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        if (cmboSources.SelectedItem is InventorySource inventorySource) {
+            var code = inventorySource.Code;
+            var lastPrintedNumber = inventorySource.LastPrintedNumber;
+            nudStartNumber.Value = lastPrintedNumber;
+            nudEndNumber.Value = lastPrintedNumber + 100;
+            monthCalendar1.SetDate(inventorySource.LastPurchaseDate ?? DateTime.Now);
+        } else {
+            MessageBox.Show("Invalid selection.  Please select a valid source.", "Error", MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+        }
     }
 
     /// <summary>
