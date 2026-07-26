@@ -110,7 +110,7 @@
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(180, 22);
+            exitToolStripMenuItem.Size = new Size(92, 22);
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
@@ -157,6 +157,7 @@
             inventorySourcesToolStripMenuItem.Name = "inventorySourcesToolStripMenuItem";
             inventorySourcesToolStripMenuItem.Size = new Size(180, 22);
             inventorySourcesToolStripMenuItem.Text = "Inventory Sources";
+            inventorySourcesToolStripMenuItem.Click += inventorySourcesToolStripMenuItem_Click;
             // 
             // labelTemplatesToolStripMenuItem
             // 
