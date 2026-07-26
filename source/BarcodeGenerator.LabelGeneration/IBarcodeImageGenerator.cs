@@ -4,8 +4,6 @@
 // Created           : 06-10-2026
 // ***********************************************************************
 
-using System.Drawing;
-
 namespace BarcodeGenerator.LabelGeneration;
 
 /// <summary>
@@ -22,8 +20,10 @@ public interface IBarcodeImageGenerator {
     /// Generates a Code 128 barcode image as a <see cref="Bitmap"/>.
     /// </summary>
     /// <param name="barcodeValue">
-    /// The value to encode in the barcode. This must not be <see langword="null"/> or empty.
+    ///     The value to encode in the barcode. This must not be <see langword="null"/> or empty.
     /// </param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
     /// <returns>
     /// A <see cref="Bitmap"/> representing the generated Code 128 barcode.
     /// </returns>
@@ -33,7 +33,7 @@ public interface IBarcodeImageGenerator {
     /// <remarks>
     /// This method uses the ZXing library to generate a Code 128 barcode image with predefined dimensions and margins.
     /// </remarks>
-    Bitmap GenerateCode128(string barcodeValue);
+    Bitmap GenerateCode128(string barcodeValue, int width, int height);
 
     /// <summary>
     /// Saves a Code 128 barcode as a PNG image file.
