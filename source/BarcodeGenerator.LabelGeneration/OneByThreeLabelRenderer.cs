@@ -7,13 +7,15 @@
 using BarcodeGenerator.Entities;
 using System.Runtime.Versioning;
 
+// ReSharper disable InvalidXmlDocComment
+
 namespace BarcodeGenerator.LabelGeneration;
 
 /// <summary>
 /// Provides functionality for rendering barcode labels using a one-by-three label template.
 /// </summary>
 /// <remarks>
-/// This class implements the <see cref="ILabelRenderer"/> interface to render barcode labels
+/// This class implements the <see cref="ILabelRenderer{RenderedBarcodeLabel}"/> interface to render barcode labels
 /// with a one-by-three layout. It utilizes the <see cref="LabelTemplateType.OneByThree"/> template type
 /// and provides methods to render the label onto a graphical surface within specified bounds.
 /// </remarks>
@@ -55,10 +57,36 @@ public class OneByThreeLabelRenderer : ILabelRenderer {
     /// <exception cref="ArgumentException">
     /// Thrown if <paramref name="bounds"/> is not a valid rectangle.
     /// </exception>
-    public void Render(RenderedBarcodeLabel label, Graphics graphics, Rectangle bounds) {
+    public void Render(IPrintableLabel label, Graphics graphics, Rectangle bounds) {
         ArgumentNullException.ThrowIfNull(label);
         ArgumentNullException.ThrowIfNull(graphics);
 
+        if (label is not RenderedBarcodeLabel barcodeLabel) {
+            throw new ArgumentException($"{nameof(OneByThreeLabelRenderer)} requires a " +
+                                        $"{nameof(RenderedBarcodeLabel)}.",
+                nameof(label));
+        }
+
+        RenderBarcodeLabel(graphics, bounds, barcodeLabel);
+    }
+
+    /// <summary>
+    /// Renders a barcode label onto the specified graphics surface within the given bounds.
+    /// </summary>
+    /// <param name="graphics">The <see cref="Graphics"/> object used for rendering the label.</param>
+    /// <param name="bounds">The <see cref="Rectangle"/> defining the area where the label will be rendered.</param>
+    /// <param name="barcodeLabel">The <see cref="RenderedBarcodeLabel"/> containing the barcode image and associated data to render.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="graphics"/> or <paramref name="barcodeLabel"/> is <c>null</c>.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    /// Thrown when the <paramref name="bounds"/> has a width or height less than or equal to zero.
+    /// </exception>
+    /// <remarks>
+    /// This method clears the graphics surface, applies rendering settings, and draws the barcode image,
+    /// label text, and additional information within the specified bounds.
+    /// </remarks>
+    private static void RenderBarcodeLabel(Graphics graphics, Rectangle bounds, RenderedBarcodeLabel barcodeLabel) {
         if (bounds.Width <= 0 || bounds.Height <= 0) {
             throw new ArgumentException("Bounds must have a positive width and height.", nameof(bounds));
         }
@@ -81,7 +109,7 @@ public class OneByThreeLabelRenderer : ILabelRenderer {
         stringFormat.Alignment = StringAlignment.Center;
         stringFormat.LineAlignment = StringAlignment.Center;
 
-        var lotText = $"Lot: {label.Label.DatePurchased}";
+        var lotText = $"Lot: {barcodeLabel.Label.DatePurchased}";
         var lotBounds = new Rectangle(
             bounds.Left + paddingX,
             bounds.Top,
@@ -103,10 +131,10 @@ public class OneByThreeLabelRenderer : ILabelRenderer {
             barcodeHeight);
 
         graphics.DrawImage(
-            label.BarcodeImage,
+            barcodeLabel.BarcodeImage,
             barcodeBounds,
-            new Rectangle(0, 0, label.BarcodeImage.Width,
-                label.BarcodeImage.Height), GraphicsUnit.Pixel);
+            new Rectangle(0, 0, barcodeLabel.BarcodeImage.Width,
+                barcodeLabel.BarcodeImage.Height), GraphicsUnit.Pixel);
 
         var barcodeTextBounds = new Rectangle(
             bounds.Left + paddingX,
@@ -115,24 +143,10 @@ public class OneByThreeLabelRenderer : ILabelRenderer {
             (int)Math.Round(bounds.Height * 0.20));
 
         graphics.DrawString(
-            label.DisplayText,
+            barcodeLabel.DisplayText,
             barcodeTextFont,
             textBrush,
             barcodeTextBounds,
             stringFormat);
-    }
-
-    /// <summary>
-    /// Converts a measurement in inches to pixels based on the specified DPI (dots per inch).
-    /// </summary>
-    /// <param name="inches">The measurement in inches to be converted.</param>
-    /// <param name="dpi">The dots per inch (DPI) value used for the conversion.</param>
-    /// <returns>The equivalent measurement in pixels, rounded to the nearest integer.</returns>
-    /// <remarks>
-    /// This method is useful for translating physical dimensions into pixel dimensions
-    /// when rendering graphical elements at a specific resolution.
-    /// </remarks>
-    private static int InchesToPixels(float inches, float dpi) {
-        return (int)Math.Round(inches * dpi);
     }
 }
