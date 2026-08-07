@@ -17,7 +17,7 @@ namespace BarcodeGenerator.Entities;
 /// This class is part of the <c>BarcodeGenerator.Entities</c> namespace and provides functionality for managing
 /// rendered barcode labels. It implements the <see cref="IDisposable"/> interface to ensure proper resource management.
 /// </remarks>
-public class RenderedBarcodeLabel : IDisposable {
+public class RenderedBarcodeLabel : IPrintableLabel, IDisposable {
     /// <summary>
     /// Gets or sets the generated barcode image associated with the rendered barcode label.
     /// </summary>
@@ -28,7 +28,7 @@ public class RenderedBarcodeLabel : IDisposable {
     /// This property holds the generated barcode image, which is rendered based on the details of the associated
     /// <see cref="BarcodeLabel"/>. It is required to ensure the barcode label is complete with its visual representation.
     /// </remarks>
-    public Bitmap BarcodeImage { get; set; } = null!;
+    public Bitmap BarcodeImage { get; set; } = new Bitmap(1, 1);
 
     /// <summary>
     /// Gets or sets the barcode label associated with the rendered barcode.
@@ -40,7 +40,7 @@ public class RenderedBarcodeLabel : IDisposable {
     /// <remarks>
     /// This property is required and must be set to ensure proper functionality of the <see cref="RenderedBarcodeLabel"/> class.
     /// </remarks>
-    public BarcodeLabel Label { get; set; } = null!;
+    public BarcodeLabel Label { get; set; } = new();
 
     /// <summary>
     /// Gets or sets the display text associated with the rendered barcode label.
@@ -60,6 +60,5 @@ public class RenderedBarcodeLabel : IDisposable {
     /// </remarks>
     public void Dispose() {
         BarcodeImage.Dispose();
-        BarcodeImage = null;
     }
 }
