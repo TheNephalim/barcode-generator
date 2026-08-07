@@ -17,7 +17,7 @@ namespace BarcodeGenerator;
 /// </remarks>
 public partial class BarcodeLabelGenerator : Form {
     private readonly IBarcodeLabelGenerator _barcodeLabelGenerator;
-    private readonly ILabelPrinterFactory _printerFactory;
+    private readonly ILabelPrinter _labelPrinter;
     private readonly IRenderedBarcodeLabelGenerator _renderedBarcodeLabelGenerator;
     private readonly IInventorySourceRepository _sourceRepository;
 
@@ -28,13 +28,13 @@ public partial class BarcodeLabelGenerator : Form {
     /// This constructor sets up the main form of the Barcode Generator application
     /// by initializing its components and preparing the user interface for interaction.
     /// </remarks>
-    public BarcodeLabelGenerator(IRenderedBarcodeLabelGenerator renderedBarcodeLabelGenerator, IBarcodeLabelGenerator barcodeLabelGenerator, ILabelPrinterFactory printerFactory, IInventorySourceRepository sourceRepository) {
+    public BarcodeLabelGenerator(IRenderedBarcodeLabelGenerator renderedBarcodeLabelGenerator, IBarcodeLabelGenerator barcodeLabelGenerator, ILabelPrinter labelPrinter, IInventorySourceRepository sourceRepository) {
         InitializeComponent();
 
         _renderedBarcodeLabelGenerator =
             renderedBarcodeLabelGenerator ?? throw new ArgumentNullException(nameof(renderedBarcodeLabelGenerator));
         _barcodeLabelGenerator = barcodeLabelGenerator ?? throw new ArgumentNullException(nameof(barcodeLabelGenerator));
-        _printerFactory = printerFactory ?? throw new ArgumentNullException(nameof(printerFactory));
+        _labelPrinter = labelPrinter ?? throw new ArgumentNullException(nameof(labelPrinter));
         _sourceRepository = sourceRepository ?? throw new ArgumentNullException(nameof(sourceRepository));
     }
 
@@ -51,16 +51,13 @@ public partial class BarcodeLabelGenerator : Form {
     /// Displays a warning message to the user if the range is invalid.
     /// </remarks>
     private static bool InvalidLabelIndexes(int startIndex, int endIndex) {
-        if (startIndex > endIndex) {
-            MessageBox.Show("Start number cannot be greater than end number",
-                "Invalid Range",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Warning);
+        if (startIndex <= endIndex) return false;
+        MessageBox.Show("Start number cannot be greater than end number",
+            "Invalid Range",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Warning);
 
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     /// <summary>
@@ -114,8 +111,7 @@ public partial class BarcodeLabelGenerator : Form {
             }
         };
 
-        var labelPrinter = _printerFactory.GetPrinter(LabelTemplateType.OneByThree);
-        labelPrinter.Print(printJob);
+        _labelPrinter.Print(printJob);
 
         MessageBox.Show("Generate!", "Information", MessageBoxButtons.OKCancel);
     }
@@ -131,7 +127,7 @@ public partial class BarcodeLabelGenerator : Form {
     /// </remarks>
     private void cmboSources_SelectedIndexChanged(object sender, EventArgs e) {
         if (InvokeRequired) {
-            Invoke(new Action(() => cmboSources_SelectedIndexChanged(sender, e)));
+            Invoke(() => cmboSources_SelectedIndexChanged(sender, e));
             return;
         }
 
@@ -172,9 +168,9 @@ public partial class BarcodeLabelGenerator : Form {
     /// and the <see cref="IRenderedBarcodeLabelGenerator"/> to render them into a final format.
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="sourceCode"/> is <c>null</c>.</exception>
-    private IList<RenderedBarcodeLabel> GenerateBarcodes(int startIndex, int endIndex, string sourceCode, DateTime datePurchased, int numberOfCopies = 1, bool collated = false) {
+    private IReadOnlyList<RenderedBarcodeLabel> GenerateBarcodes(int startIndex, int endIndex, string sourceCode, DateTime datePurchased, int numberOfCopies = 1, bool collated = false) {
         var barcodeLabels = _barcodeLabelGenerator.Generate(startIndex, endIndex, sourceCode, datePurchased, numberOfCopies, collated);
-        return _renderedBarcodeLabelGenerator.Generate(barcodeLabels);
+        return _renderedBarcodeLabelGenerator.Generate(barcodeLabels).AsReadOnly();
     }
 
     /// <summary>
