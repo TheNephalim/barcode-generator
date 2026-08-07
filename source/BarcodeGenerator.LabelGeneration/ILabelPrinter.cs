@@ -24,9 +24,9 @@ public interface ILabelPrinter {
     /// Prints the specified barcode label print job.
     /// </summary>
     /// <param name="printJob">
-    /// An instance of <see cref="BarcodeGenerator.Entities.LabelPrintJob"/> that contains the details
-    /// of the print job, such as the labels to be printed, the number of copies, the label size,
-    /// and the printer name.
+    ///     An instance of <see cref="BarcodeGenerator.Entities.LabelPrintJob"/> that contains the details
+    ///     of the print job, such as the labels to be printed, the number of copies, the label size,
+    ///     and the printer name.
     /// </param>
     /// <remarks>
     /// Implementations of this method are responsible for processing the provided <paramref name="printJob"/>
