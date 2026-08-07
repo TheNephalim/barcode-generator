@@ -34,18 +34,18 @@ public interface ILabelRenderer {
     /// Renders a barcode label onto a graphical surface within specified bounds.
     /// </summary>
     /// <param name="label">
-    /// The <see cref="RenderedBarcodeLabel"/> instance containing the barcode image and associated label details to be rendered.
+    ///     The <see cref="RenderedBarcodeLabel"/> instance containing the barcode image and associated label details to be rendered.
     /// </param>
     /// <param name="graphics">
-    /// The <see cref="Graphics"/> object used as the rendering surface.
+    ///     The <see cref="Graphics"/> object used as the rendering surface.
     /// </param>
     /// <param name="bounds">
-    /// A <see cref="Rectangle"/> defining the area within which the barcode label should be rendered.
+    ///     A <see cref="Rectangle"/> defining the area within which the barcode label should be rendered.
     /// </param>
     /// <remarks>
     /// This method is responsible for drawing the barcode label onto the provided graphics surface.
     /// Implementations should ensure that the rendering respects the specified bounds and utilizes
     /// the label's template type.
     /// </remarks>
-    void Render(RenderedBarcodeLabel label, Graphics graphics, Rectangle bounds);
+    void Render(IPrintableLabel label, Graphics graphics, Rectangle bounds);
 }
