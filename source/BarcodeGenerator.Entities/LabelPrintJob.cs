@@ -3,6 +3,7 @@
 // Author            : Robert Eberhart
 // Created           : 06-11-2026
 // ***********************************************************************
+
 namespace BarcodeGenerator.Entities;
 
 /// <summary>
@@ -38,7 +39,7 @@ public class LabelPrintJob {
     /// and its associated generated barcode image. This property is used to specify the labels included
     /// in the print job.
     /// </remarks>
-    public IList<RenderedBarcodeLabel> Labels { get; set; }
+    public IReadOnlyList<IPrintableLabel> Labels { get; set; } = [];
 
     /// <summary>
     /// Gets or sets the size of the label to be printed.
@@ -50,7 +51,7 @@ public class LabelPrintJob {
     /// This property is used to define the size of the labels for the print job. It ensures that the labels are printed
     /// with the correct dimensions as specified.
     /// </remarks>
-    public LabelSize LabelSize { get; set; } = null!;
+    public LabelSize LabelSize { get; set; } = new();
 
     /// <summary>
     /// Gets or sets the name of the printer to be used for the label printing job.
