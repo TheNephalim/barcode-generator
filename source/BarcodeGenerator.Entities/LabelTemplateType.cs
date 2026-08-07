@@ -13,5 +13,6 @@ namespace BarcodeGenerator.Entities;
 /// A label template with dimensions of 1x3.
 /// </summary>
 public enum LabelTemplateType {
-    OneByThree
+    OneByThree,
+    OneInchRound
 }
