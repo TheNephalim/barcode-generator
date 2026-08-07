@@ -48,8 +48,12 @@ public sealed class ConfigureLabelGeneration : Module {
             .Keyed<ILabelRenderer>(LabelTemplateType.OneByThree)
             .InstancePerDependency();
 
-        builder.RegisterType<ThermalPrinter>()
-            .Keyed<ILabelPrinter>(LabelTemplateType.OneByThree)
+        builder.RegisterType<OneInchRoundPricingLabelRenderer>()
+            .Keyed<ILabelRenderer>(LabelTemplateType.OneInchRound)
+            .InstancePerDependency();
+
+        builder.RegisterType<WindowsLabelPrinter>()
+            .As<ILabelPrinter>()
             .InstancePerDependency();
 
         builder.RegisterType<LabelRendererFactory>()
