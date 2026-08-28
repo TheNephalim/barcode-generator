@@ -49,5 +49,9 @@ public static class FormRegistrar {
         builder.RegisterType<PriceLabelGenerator>()
             .AsSelf()
             .InstancePerDependency();
+
+        builder.RegisterType<ImportFlipwiseInventoryExport>()
+            .AsSelf()
+            .InstancePerDependency();
     }
 }
