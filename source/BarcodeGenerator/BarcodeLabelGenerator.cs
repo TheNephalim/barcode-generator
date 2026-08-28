@@ -61,6 +61,28 @@ public partial class BarcodeLabelGenerator : Form {
     }
 
     /// <summary>
+    /// Validates the number of copies and displays a warning message if the value is invalid.
+    /// </summary>
+    /// <param name="numberOfCopies">The number of copies to validate.</param>
+    /// <returns>
+    /// <see langword="true"/> if the number of copies is invalid (less than or equal to 0);
+    /// otherwise, <see langword="false"/>.
+    /// </returns>
+    /// <remarks>
+    /// This method checks if the provided number of copies is greater than 0. If not,
+    /// it displays a warning message to the user indicating that the input is invalid.
+    /// </remarks>
+    private static bool InvalidNumberOfCopies(int numberOfCopies) {
+        if (numberOfCopies >= 0) return false;
+        MessageBox.Show("Number of copies must be greater than 0.",
+            "Invalid Input",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Warning);
+
+        return true;
+    }
+
+    /// <summary>
     /// Handles the <c>Click</c> event of the <c>btnCancel</c> button.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
@@ -82,8 +104,14 @@ public partial class BarcodeLabelGenerator : Form {
     /// This method validates the input indexes and generates barcode labels if the validation passes.
     /// A message box is displayed upon successful generation.
     /// </remarks>
-    private void btnGenerate_Click(object sender, EventArgs e) {
-        var sourceCode = cmboSources.SelectedValue?.ToString();
+    private async void btnGenerate_Click(object sender, EventArgs e) {
+        if (cmboSources.SelectedItem is not InventorySource source) {
+            MessageBox.Show("Please select a valid inventory source.", "Invalid Source", MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+            return;
+        }
+
+        var sourceCode = source.Code;
         var datePurchased = monthCalendar1.SelectionStart;
 
         var startIndex = Convert.ToInt32(nudStartNumber.Value);
@@ -92,6 +120,7 @@ public partial class BarcodeLabelGenerator : Form {
         var isCollated = chkIsCollated.Checked;
 
         if (InvalidLabelIndexes(startIndex, endIndex)) return;
+        if (InvalidNumberOfCopies(numberOfCopies)) return;
 
         if (string.IsNullOrEmpty(sourceCode)) {
             MessageBox.Show("Please select a source code.",
@@ -111,9 +140,18 @@ public partial class BarcodeLabelGenerator : Form {
             }
         };
 
-        _labelPrinter.Print(printJob);
+        try {
+            _labelPrinter.Print(printJob);
+        } catch (Exception ex) {
+            MessageBox.Show($"Failed to print labels: {ex.Message}", "Printing Error", MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+            return;
+        }
 
-        MessageBox.Show("Generate!", "Information", MessageBoxButtons.OKCancel);
+        source.LastPrintedNumber = endIndex;
+        await _sourceRepository.UpdateSourceAsync(source);
+
+        MessageBox.Show("Barcodes generated and sent to the printer successfully.", "Information", MessageBoxButtons.OKCancel);
     }
 
     /// <summary>
