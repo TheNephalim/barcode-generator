@@ -89,6 +89,41 @@ public sealed class DatabaseInitializer {
                             SourceCode TEXT NOT NULL UNIQUE,
                             LastNumber INTEGER NOT NULL DEFAULT 0
                            );
+
+                           CREATE TABLE IF NOT EXISTS InventoryItem
+                           (
+                               Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                               Sku TEXT NOT NULL UNIQUE,
+                               Title TEXT NOT NULL,
+                               Price REAL,
+                               AcquisitionCost REAL,
+                               AcquisitionDate TEXT,
+                               AcquisitionSource TEXT,
+                               StorageLocation TEXT,
+                               SourceSystem TEXT,
+                               SourceRecordId TEXT,
+                               SourceDataJson TEXT,
+                               ImportedAt TEXT NOT NULL,
+                               CreatedAt TEXT NOT NULL,
+                               ModifiedAt TEXT NOT NULL
+                           );
+
+                           CREATE TABLE IF NOT EXISTS InventoryImportStaging
+                           (
+                               Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                               ImportBatchId TEXT NOT NULL,
+                               Sku TEXT,
+                               Title TEXT,
+                               Price REAL,
+                               AcquisitionCost REAL,
+                               AcquisitionDate TEXT,
+                               AcquisitionSource TEXT,
+                               StorageLocation TEXT,
+                               OriginalSourceJson TEXT NOT NULL,
+                               ImportStatus TEXT NOT NULL,
+                               ValidationMessage TEXT,
+                               CreatedAt TEXT NOT NULL
+                           );
                            """;
 
         connection.Execute(sql);
