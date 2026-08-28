@@ -50,6 +50,7 @@
             databaseBackupToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
+            importFlipwiseInventoryExportToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -173,7 +174,7 @@
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { scannerTestToolStripMenuItem, resetLastNumberToolStripMenuItem, exportLabelHistoryToolStripMenuItem, databaseBackupToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { scannerTestToolStripMenuItem, resetLastNumberToolStripMenuItem, exportLabelHistoryToolStripMenuItem, databaseBackupToolStripMenuItem, importFlipwiseInventoryExportToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(47, 20);
             toolsToolStripMenuItem.Text = "Tools";
@@ -181,25 +182,25 @@
             // scannerTestToolStripMenuItem
             // 
             scannerTestToolStripMenuItem.Name = "scannerTestToolStripMenuItem";
-            scannerTestToolStripMenuItem.Size = new Size(179, 22);
+            scannerTestToolStripMenuItem.Size = new Size(244, 22);
             scannerTestToolStripMenuItem.Text = "Scanner Test";
             // 
             // resetLastNumberToolStripMenuItem
             // 
             resetLastNumberToolStripMenuItem.Name = "resetLastNumberToolStripMenuItem";
-            resetLastNumberToolStripMenuItem.Size = new Size(179, 22);
+            resetLastNumberToolStripMenuItem.Size = new Size(244, 22);
             resetLastNumberToolStripMenuItem.Text = "Reset Last Number";
             // 
             // exportLabelHistoryToolStripMenuItem
             // 
             exportLabelHistoryToolStripMenuItem.Name = "exportLabelHistoryToolStripMenuItem";
-            exportLabelHistoryToolStripMenuItem.Size = new Size(179, 22);
+            exportLabelHistoryToolStripMenuItem.Size = new Size(244, 22);
             exportLabelHistoryToolStripMenuItem.Text = "Export Label History";
             // 
             // databaseBackupToolStripMenuItem
             // 
             databaseBackupToolStripMenuItem.Name = "databaseBackupToolStripMenuItem";
-            databaseBackupToolStripMenuItem.Size = new Size(179, 22);
+            databaseBackupToolStripMenuItem.Size = new Size(244, 22);
             databaseBackupToolStripMenuItem.Text = "Database Backup";
             // 
             // helpToolStripMenuItem
@@ -214,6 +215,13 @@
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             aboutToolStripMenuItem.Size = new Size(107, 22);
             aboutToolStripMenuItem.Text = "About";
+            // 
+            // importFlipwiseInventoryExportToolStripMenuItem
+            // 
+            importFlipwiseInventoryExportToolStripMenuItem.Name = "importFlipwiseInventoryExportToolStripMenuItem";
+            importFlipwiseInventoryExportToolStripMenuItem.Size = new Size(244, 22);
+            importFlipwiseInventoryExportToolStripMenuItem.Text = "Import Flipwise Inventory Export";
+            importFlipwiseInventoryExportToolStripMenuItem.Click += importFlipwiseInventoryExportToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -261,5 +269,6 @@
         private ToolStripMenuItem databaseBackupToolStripMenuItem;
         private ToolStripMenuItem helpToolStripMenuItem;
         private ToolStripMenuItem aboutToolStripMenuItem;
+        private ToolStripMenuItem importFlipwiseInventoryExportToolStripMenuItem;
     }
 }
