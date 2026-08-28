@@ -193,7 +193,7 @@ partial class BarcodeLabelGenerator {
         Controls.Add(nudEndNumber);
         Controls.Add(nudStartNumber);
         Name = "BarcodeLabelGenerator";
-        Text = "Form1";
+        Text = "Barcode Label Generator";
         Load += MainForm_Load;
         ((System.ComponentModel.ISupportInitialize)nudStartNumber).EndInit();
         ((System.ComponentModel.ISupportInitialize)nudEndNumber).EndInit();
