@@ -9,6 +9,7 @@ namespace BarcodeGenerator;
 /// </remarks>
 public partial class MainForm : Form {
     private readonly Func<BarcodeLabelGenerator> _barcodeLabelGeneratorFactory;
+    private readonly Func<ImportFlipwiseInventoryExport> _flipwiseInventoryExportFactory;
     private readonly Func<InventorySourceMaintenance> _inventorySourceMaintenanceFactory;
     private readonly Func<PriceLabelGenerator> _pricingLabelGeneratorFormFactory;
 
@@ -22,12 +23,14 @@ public partial class MainForm : Form {
     public MainForm(
         Func<BarcodeLabelGenerator> barcodeLabelGeneratorFactory,
         Func<PriceLabelGenerator> pricingLabelGeneratorFormFactory,
-        Func<InventorySourceMaintenance> inventorySourceMaintenanceFactory) {
+        Func<InventorySourceMaintenance> inventorySourceMaintenanceFactory,
+        Func<ImportFlipwiseInventoryExport> flipwiseInventoryExportFactory) {
         InitializeComponent();
 
         _barcodeLabelGeneratorFactory = barcodeLabelGeneratorFactory ?? throw new ArgumentNullException(nameof(barcodeLabelGeneratorFactory));
         _pricingLabelGeneratorFormFactory = pricingLabelGeneratorFormFactory ?? throw new ArgumentNullException(nameof(pricingLabelGeneratorFormFactory));
         _inventorySourceMaintenanceFactory = inventorySourceMaintenanceFactory ?? throw new ArgumentNullException(nameof(inventorySourceMaintenanceFactory));
+        _flipwiseInventoryExportFactory = flipwiseInventoryExportFactory ?? throw new ArgumentNullException(nameof(flipwiseInventoryExportFactory));
     }
 
     /// <summary>
@@ -69,6 +72,28 @@ public partial class MainForm : Form {
         Close();
     }
 
+    /// <summary>
+    /// Handles the click event for the "Import Flipwise Inventory Export" menu item.
+    /// </summary>
+    /// <param name="sender">
+    /// The source of the event, typically the menu item that was clicked.
+    /// </param>
+    /// <param name="e">
+    /// An <see cref="EventArgs"/> instance containing the event data.
+    /// </param>
+    private void importFlipwiseInventoryExportToolStripMenuItem_Click(object sender, EventArgs e) {
+        var form = _flipwiseInventoryExportFactory();
+        form.ShowDialog(this);
+    }
+
+    /// <summary>
+    /// Handles the click event for the "Inventory Sources" menu item.
+    /// </summary>
+    /// <param name="sender">The source of the event, typically the menu item that was clicked.</param>
+    /// <param name="e">An <see cref="EventArgs"/> instance containing the event data.</param>
+    /// <remarks>
+    /// This method creates and displays a dialog for inventory source maintenance.
+    /// </remarks>
     private void inventorySourcesToolStripMenuItem_Click(object sender, EventArgs e) {
         var form = _inventorySourceMaintenanceFactory();
         form.ShowDialog(this);
