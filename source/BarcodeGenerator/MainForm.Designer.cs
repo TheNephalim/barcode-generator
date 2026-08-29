@@ -27,6 +27,7 @@
         ///  the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            components = new System.ComponentModel.Container();
             lblLaunchBarcodeGenerator = new Label();
             btnLaunchBarcodeLabelGenerator = new Button();
             lblLaunchPriceLabelGenerator = new Label();
@@ -48,10 +49,12 @@
             resetLastNumberToolStripMenuItem = new ToolStripMenuItem();
             exportLabelHistoryToolStripMenuItem = new ToolStripMenuItem();
             databaseBackupToolStripMenuItem = new ToolStripMenuItem();
+            importFlipwiseInventoryExportToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
-            importFlipwiseInventoryExportToolStripMenuItem = new ToolStripMenuItem();
+            errorProvider1 = new ErrorProvider(components);
             menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
             // 
             // lblLaunchBarcodeGenerator
@@ -156,20 +159,20 @@
             // inventorySourcesToolStripMenuItem
             // 
             inventorySourcesToolStripMenuItem.Name = "inventorySourcesToolStripMenuItem";
-            inventorySourcesToolStripMenuItem.Size = new Size(180, 22);
+            inventorySourcesToolStripMenuItem.Size = new Size(168, 22);
             inventorySourcesToolStripMenuItem.Text = "Inventory Sources";
             inventorySourcesToolStripMenuItem.Click += inventorySourcesToolStripMenuItem_Click;
             // 
             // labelTemplatesToolStripMenuItem
             // 
             labelTemplatesToolStripMenuItem.Name = "labelTemplatesToolStripMenuItem";
-            labelTemplatesToolStripMenuItem.Size = new Size(180, 22);
+            labelTemplatesToolStripMenuItem.Size = new Size(168, 22);
             labelTemplatesToolStripMenuItem.Text = "Label Templates";
             // 
             // printerSettingsToolStripMenuItem
             // 
             printerSettingsToolStripMenuItem.Name = "printerSettingsToolStripMenuItem";
-            printerSettingsToolStripMenuItem.Size = new Size(180, 22);
+            printerSettingsToolStripMenuItem.Size = new Size(168, 22);
             printerSettingsToolStripMenuItem.Text = "Printer Settings";
             // 
             // toolsToolStripMenuItem
@@ -203,6 +206,13 @@
             databaseBackupToolStripMenuItem.Size = new Size(244, 22);
             databaseBackupToolStripMenuItem.Text = "Database Backup";
             // 
+            // importFlipwiseInventoryExportToolStripMenuItem
+            // 
+            importFlipwiseInventoryExportToolStripMenuItem.Name = "importFlipwiseInventoryExportToolStripMenuItem";
+            importFlipwiseInventoryExportToolStripMenuItem.Size = new Size(244, 22);
+            importFlipwiseInventoryExportToolStripMenuItem.Text = "Import Flipwise Inventory Export";
+            importFlipwiseInventoryExportToolStripMenuItem.Click += importFlipwiseInventoryExportToolStripMenuItem_Click;
+            // 
             // helpToolStripMenuItem
             // 
             helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem });
@@ -216,19 +226,16 @@
             aboutToolStripMenuItem.Size = new Size(107, 22);
             aboutToolStripMenuItem.Text = "About";
             // 
-            // importFlipwiseInventoryExportToolStripMenuItem
+            // errorProvider1
             // 
-            importFlipwiseInventoryExportToolStripMenuItem.Name = "importFlipwiseInventoryExportToolStripMenuItem";
-            importFlipwiseInventoryExportToolStripMenuItem.Size = new Size(244, 22);
-            importFlipwiseInventoryExportToolStripMenuItem.Text = "Import Flipwise Inventory Export";
-            importFlipwiseInventoryExportToolStripMenuItem.Click += importFlipwiseInventoryExportToolStripMenuItem_Click;
+            errorProvider1.ContainerControl = this;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.DarkSeaGreen;
-            ClientSize = new Size(800, 467);
+            ClientSize = new Size(800, 212);
             Controls.Add(btnLaunchPriceLabelGenerator);
             Controls.Add(lblLaunchPriceLabelGenerator);
             Controls.Add(btnLaunchBarcodeLabelGenerator);
@@ -240,6 +247,7 @@
             Load += MainForm_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -270,5 +278,6 @@
         private ToolStripMenuItem helpToolStripMenuItem;
         private ToolStripMenuItem aboutToolStripMenuItem;
         private ToolStripMenuItem importFlipwiseInventoryExportToolStripMenuItem;
+        private ErrorProvider errorProvider1;
     }
 }
