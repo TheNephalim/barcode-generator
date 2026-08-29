@@ -72,7 +72,7 @@ public partial class ImportFlipwiseInventoryExport : Form {
             var recordList = (BindingList<InventoryItem>)dataGridView1.DataSource;
             var importResults = await _inventoryItemRepository.ImportAsync(recordList);
             MessageBox.Show(
-                $"Import complete: {importResults.RecordsAdded} added, {importResults.RecordsProcessed} processed, {importResults.RecordsSkipped} skipped.",
+                $"Import complete: {importResults.RecordsAdded} added, {importResults.RecordsProcessed} processed, Already Imported:  {importResults.ExistingRecords}, Possible Relists:  {importResults.PossibleRelists}, Source Conflicts: {importResults.SourceConflicts}.",
                 "Import Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
             dataGridView1.DataSource = null; // Clear the grid after successful import
         } catch (Exception exception) {
