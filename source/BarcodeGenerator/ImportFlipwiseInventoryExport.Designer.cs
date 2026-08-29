@@ -45,6 +45,7 @@
             btnOpenFlipwiseExport.TabIndex = 0;
             btnOpenFlipwiseExport.Text = "Open File Dialog";
             btnOpenFlipwiseExport.UseVisualStyleBackColor = true;
+            btnOpenFlipwiseExport.Click += btnOpenFlipwiseExport_Click;
             // 
             // label1
             // 
@@ -73,6 +74,7 @@
             btnCommitImport.TabIndex = 3;
             btnCommitImport.Text = "Commit Import";
             btnCommitImport.UseVisualStyleBackColor = true;
+            btnCommitImport.Click += btnCommitImport_Click;
             // 
             // btnClearData
             // 
@@ -82,6 +84,7 @@
             btnClearData.TabIndex = 4;
             btnClearData.Text = "Clear Data";
             btnClearData.UseVisualStyleBackColor = true;
+            btnClearData.Click += btnClearData_Click;
             // 
             // btnCloseWindow
             // 
@@ -91,13 +94,14 @@
             btnCloseWindow.TabIndex = 5;
             btnCloseWindow.Text = "Close";
             btnCloseWindow.UseVisualStyleBackColor = true;
+            btnCloseWindow.Click += btnCloseWindow_Click;
             // 
             // ImportFlipwiseInventoryExport
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Green;
-            ClientSize = new Size(800, 360);
+            ClientSize = new Size(800, 332);
             Controls.Add(btnCloseWindow);
             Controls.Add(btnClearData);
             Controls.Add(btnCommitImport);
