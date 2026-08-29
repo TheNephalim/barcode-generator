@@ -1,5 +1,13 @@
 ﻿namespace BarcodeGenerator;
 
+/// <summary>
+/// Represents a partial class for managing inventory source maintenance functionality 
+/// within the Barcode Generator application.
+/// </summary>
+/// <remarks>
+/// This class is auto-generated and may contain designer-generated code. 
+/// It is used to handle resources and functionality related to inventory source maintenance.
+/// </remarks>
 partial class InventorySourceMaintenance {
     /// <summary>
     /// Required designer variable.
@@ -119,7 +127,7 @@ partial class InventorySourceMaintenance {
         // 
         // btnAddNew
         // 
-        btnAddNew.Location = new Point(205, 424);
+        btnAddNew.Location = new Point(353, 424);
         btnAddNew.Name = "btnAddNew";
         btnAddNew.Size = new Size(75, 23);
         btnAddNew.TabIndex = 12;
@@ -129,7 +137,7 @@ partial class InventorySourceMaintenance {
         // 
         // btnSave
         // 
-        btnSave.Location = new Point(286, 424);
+        btnSave.Location = new Point(434, 424);
         btnSave.Name = "btnSave";
         btnSave.Size = new Size(75, 23);
         btnSave.TabIndex = 13;
@@ -139,7 +147,7 @@ partial class InventorySourceMaintenance {
         // 
         // btnClose
         // 
-        btnClose.Location = new Point(367, 424);
+        btnClose.Location = new Point(515, 424);
         btnClose.Name = "btnClose";
         btnClose.Size = new Size(75, 23);
         btnClose.TabIndex = 16;
@@ -169,7 +177,7 @@ partial class InventorySourceMaintenance {
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        BackColor = Color.FromArgb(0, 192, 0);
+        BackColor = Color.Green;
         ClientSize = new Size(649, 459);
         Controls.Add(mtxtLotDate);
         Controls.Add(chkIsActive);
