@@ -81,49 +81,6 @@ public sealed class InventoryItemRepository : IInventoryItemRepository {
     }
 
     /// <summary>
-    /// Checks if an inventory item exists in the database based on the specified source platform and source ID.
-    /// </summary>
-    /// <param name="sourcePlatform">
-    /// The platform or system from which the inventory item originates. Can be <c>null</c>.
-    /// </param>
-    /// <param name="sourceId">
-    /// The unique identifier of the inventory item in the source platform. Can be <c>null</c>.
-    /// </param>
-    /// <param name="connection">
-    /// An open database connection to be used for the query.
-    /// </param>
-    /// <param name="transaction">
-    /// An optional database transaction to be used for the query. Defaults to <c>null</c>.
-    /// </param>
-    /// <returns>
-    /// A <see cref="Task{TResult}"/> representing the asynchronous operation. The task result contains
-    /// <c>true</c> if the inventory item exists; otherwise, <c>false</c>.
-    /// </returns>
-    /// <exception cref="ArgumentNullException">
-    /// Thrown when <paramref name="connection"/> is <c>null</c>.
-    /// </exception>
-    public async Task<bool> ExistsAsync(string? sourcePlatform, string? sourceId, IDbConnection connection,
-            IDbTransaction? transaction = null) {
-        ArgumentNullException.ThrowIfNull(connection);
-        const string sql = """
-                           SELECT COUNT(*)
-                           FROM InventoryItem
-                           WHERE SourceSystem = @SourceSystem
-                             AND SourceRecordId = @SourceRecordId;
-                           """;
-
-        var parameters = new Dictionary<string, object> {
-            { "SourceSystem", sourcePlatform }, { "SourceRecordId", sourceId }
-        };
-
-        var commandDefinition = new CommandDefinition(sql, parameters, transaction, null, CommandType.Text,
-            CommandFlags.None, CancellationToken.None);
-
-        var result = await connection.ExecuteScalarAsync(commandDefinition);
-        return result != null && Convert.ToInt32(result) > 0;
-    }
-
-    /// <summary>
     /// Adds a collection of <see cref="InventoryItem"/> objects to the database asynchronously.
     /// </summary>
     /// <param name="inventoryItems">
@@ -155,12 +112,30 @@ public sealed class InventoryItemRepository : IInventoryItemRepository {
             foreach (var item in inventoryItems) {
                 results.RecordsProcessed++;
 
-                var exists = await ExistsAsync(item.SourceSystem,
+                var ebayIdExists = await SourceRecordExistsAsync(item.SourceSystem,
                     item.SourceRecordId,
                     connection,
                     transaction);
 
-                if (exists) {
+                var skuExists = await SkuExistsAsync(item.CustomSku, connection, transaction);
+
+                if (ebayIdExists && skuExists) {
+                    results.ExistingRecords++;
+                    results.RecordsSkipped++;
+                    continue;
+                }
+
+                if (skuExists) {
+                    // Log probable relist.
+                    // Potentially update the item's SourceRecordId later.
+                    results.RecordsSkipped++;
+                    results.PossibleRelists++;
+                    continue;
+                }
+
+                if (ebayIdExists) {
+                    // Log conflicting source ID / SKU.
+                    results.SourceConflicts++;
                     results.RecordsSkipped++;
                     continue;
                 }
@@ -176,5 +151,87 @@ public sealed class InventoryItemRepository : IInventoryItemRepository {
         }
 
         return results;
+    }
+
+    /// <summary>
+    /// Checks whether an inventory item with the specified SKU exists in the database.
+    /// </summary>
+    /// <param name="sku">
+    /// The SKU of the inventory item to check for. Can be <c>null</c>.
+    /// </param>
+    /// <param name="connection">
+    /// An open database connection to be used for the query.
+    /// </param>
+    /// <param name="transaction">
+    /// An optional database transaction to be used for the query. Can be <c>null</c>.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Task{TResult}"/> representing the asynchronous operation. The task result contains
+    /// <c>true</c> if an inventory item with the specified SKU exists; otherwise, <c>false</c>.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="connection"/> is <c>null</c>.
+    /// </exception>
+    public async Task<bool> SkuExistsAsync(string? sku, IDbConnection connection,
+                IDbTransaction? transaction = null) {
+        ArgumentNullException.ThrowIfNull(connection);
+        const string sql = """
+                           SELECT COUNT(*)
+                           FROM InventoryItem
+                           WHERE Sku = @Sku
+                           """;
+
+        var parameters = new Dictionary<string, object> {
+            { "Sku", sku }
+        };
+
+        var commandDefinition = new CommandDefinition(sql, parameters, transaction, null, CommandType.Text,
+            CommandFlags.None, CancellationToken.None);
+
+        var result = await connection.ExecuteScalarAsync(commandDefinition);
+        return result != null && Convert.ToInt32(result) > 0;
+    }
+
+    /// <summary>
+    /// Checks if an inventory item exists in the database based on the specified source platform and source ID.
+    /// </summary>
+    /// <param name="sourcePlatform">
+    /// The platform or system from which the inventory item originates. Can be <c>null</c>.
+    /// </param>
+    /// <param name="sourceId">
+    /// The unique identifier of the inventory item in the source platform. Can be <c>null</c>.
+    /// </param>
+    /// <param name="connection">
+    /// An open database connection to be used for the query.
+    /// </param>
+    /// <param name="transaction">
+    /// An optional database transaction to be used for the query. Defaults to <c>null</c>.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Task{TResult}"/> representing the asynchronous operation. The task result contains
+    /// <c>true</c> if the inventory item exists; otherwise, <c>false</c>.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="connection"/> is <c>null</c>.
+    /// </exception>
+    public async Task<bool> SourceRecordExistsAsync(string? sourcePlatform, string? sourceId, IDbConnection connection,
+            IDbTransaction? transaction = null) {
+        ArgumentNullException.ThrowIfNull(connection);
+        const string sql = """
+                           SELECT COUNT(*)
+                           FROM InventoryItem
+                           WHERE SourceSystem = @SourceSystem
+                             AND SourceRecordId = @SourceRecordId;
+                           """;
+
+        var parameters = new Dictionary<string, object> {
+            { "SourceSystem", sourcePlatform }, { "SourceRecordId", sourceId }
+        };
+
+        var commandDefinition = new CommandDefinition(sql, parameters, transaction, null, CommandType.Text,
+            CommandFlags.None, CancellationToken.None);
+
+        var result = await connection.ExecuteScalarAsync(commandDefinition);
+        return result != null && Convert.ToInt32(result) > 0;
     }
 }
