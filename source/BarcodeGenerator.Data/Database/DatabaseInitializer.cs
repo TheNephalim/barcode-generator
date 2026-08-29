@@ -124,6 +124,10 @@ public sealed class DatabaseInitializer {
                                ValidationMessage TEXT,
                                CreatedAt TEXT NOT NULL
                            );
+
+                           CREATE UNIQUE INDEX IF NOT EXISTS UX_Inventory_Source
+                           ON InventoryItem(SourceSystem, SourceRecordId)
+                           WHERE SourceRecordId IS NOT NULL;
                            """;
 
         connection.Execute(sql);
