@@ -150,7 +150,7 @@
             // btnPrint
             // 
             btnPrint.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnPrint.Location = new Point(368, 235);
+            btnPrint.Location = new Point(329, 251);
             btnPrint.Name = "btnPrint";
             btnPrint.Size = new Size(90, 38);
             btnPrint.TabIndex = 11;
@@ -161,7 +161,7 @@
             // btnClose
             // 
             btnClose.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnClose.Location = new Point(278, 235);
+            btnClose.Location = new Point(425, 251);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(75, 38);
             btnClose.TabIndex = 12;
@@ -169,7 +169,7 @@
             btnClose.UseVisualStyleBackColor = true;
             btnClose.Click += btnClose_Click;
             // 
-            // VinylPricingForm
+            // PriceLabelGenerator
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -188,7 +188,7 @@
             Controls.Add(label1);
             Controls.Add(cmboSleeveCondition);
             Controls.Add(cmboVinylCondition);
-            Name = "VinylPricingForm";
+            Name = "PriceLabelGenerator";
             Text = "Vinyl Pricing";
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ResumeLayout(false);
