@@ -26,6 +26,7 @@ partial class BarcodeLabelGenerator {
     ///  the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent() {
+        components = new System.ComponentModel.Container();
         nudStartNumber = new NumericUpDown();
         nudEndNumber = new NumericUpDown();
         label1 = new Label();
@@ -40,6 +41,7 @@ partial class BarcodeLabelGenerator {
         chkIsCollated = new CheckBox();
         chkSuppressLastNumberUpdate = new CheckBox();
         lblPurchaseDate = new Label();
+        contextMenuStrip1 = new ContextMenuStrip(components);
         ((System.ComponentModel.ISupportInitialize)nudStartNumber).BeginInit();
         ((System.ComponentModel.ISupportInitialize)nudEndNumber).BeginInit();
         ((System.ComponentModel.ISupportInitialize)nudCopyNumber).BeginInit();
@@ -172,11 +174,16 @@ partial class BarcodeLabelGenerator {
         lblPurchaseDate.TabIndex = 16;
         lblPurchaseDate.Text = "Purchase Date";
         // 
+        // contextMenuStrip1
+        // 
+        contextMenuStrip1.Name = "contextMenuStrip1";
+        contextMenuStrip1.Size = new Size(61, 4);
+        // 
         // BarcodeLabelGenerator
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        BackColor = Color.DarkSeaGreen;
+        BackColor = Color.Green;
         ClientSize = new Size(800, 257);
         Controls.Add(lblPurchaseDate);
         Controls.Add(chkSuppressLastNumberUpdate);
@@ -217,4 +224,5 @@ partial class BarcodeLabelGenerator {
     private CheckBox chkIsCollated;
     private CheckBox chkSuppressLastNumberUpdate;
     private Label lblPurchaseDate;
+    private ContextMenuStrip contextMenuStrip1;
 }
