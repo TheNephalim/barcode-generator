@@ -8,13 +8,22 @@
 // </copyright>
 // ***********************************************************************
 
-using System.Data;
 using BarcodeGenerator.Data.Repositories.Results;
 using BarcodeGenerator.Entities;
+using System.Data;
 
 namespace BarcodeGenerator.Data.Repositories;
 
+/// <summary>
+/// Represents a repository interface for managing inventory items in the database.
+/// </summary>
+/// <remarks>
+/// This interface defines methods for performing CRUD operations and other database interactions
+/// related to inventory items. It is intended to be implemented by classes that handle the actual
+/// database logic.
+/// </remarks>
 public interface IInventoryItemRepository {
+
     /// <summary>
     /// Adds a new inventory item to the database asynchronously.
     /// </summary>
@@ -40,6 +49,49 @@ public interface IInventoryItemRepository {
     Task AddInventoryItemAsync(InventoryItem inventoryItem, IDbConnection connection, IDbTransaction transaction);
 
     /// <summary>
+    /// Adds a collection of <see cref="InventoryItem"/> objects to the database asynchronously.
+    /// </summary>
+    /// <param name="inventoryItems">
+    /// A collection of <see cref="InventoryItem"/> objects to be added to the database.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Task"/> representing the asynchronous operation.
+    /// </returns>
+    /// <remarks>
+    /// This method processes the provided collection of inventory items and adds them to the database
+    /// within a single transaction. If any error occurs during the operation, the transaction is rolled back.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="inventoryItems"/> is <c>null</c>.
+    /// </exception>
+    /// <exception cref="Exception">
+    /// Thrown when an error occurs during the database operation.
+    /// </exception>
+    Task<InventoryImportResult> ImportAsync(IEnumerable<InventoryItem> inventoryItems);
+
+    /// <summary>
+    /// Checks whether an inventory item with the specified SKU exists in the database.
+    /// </summary>
+    /// <param name="sku">
+    /// The SKU of the inventory item to check for. Can be <c>null</c>.
+    /// </param>
+    /// <param name="connection">
+    /// An open database connection to be used for the query.
+    /// </param>
+    /// <param name="transaction">
+    /// An optional database transaction to be used for the query. Can be <c>null</c>.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Task{TResult}"/> representing the asynchronous operation. The task result contains
+    /// <c>true</c> if an inventory item with the specified SKU exists; otherwise, <c>false</c>.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="connection"/> is <c>null</c>.
+    /// </exception>
+    Task<bool> SkuExistsAsync(string? sku, IDbConnection connection,
+        IDbTransaction? transaction = null);
+
+    /// <summary>
     /// Checks if an inventory item exists in the database based on the specified source platform and source ID.
     /// </summary>
     /// <param name="sourcePlatform">
@@ -61,27 +113,6 @@ public interface IInventoryItemRepository {
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="connection"/> is <c>null</c>.
     /// </exception>
-    Task<bool> ExistsAsync(string? sourcePlatform, string? sourceId, IDbConnection connection,
+    Task<bool> SourceRecordExistsAsync(string? sourcePlatform, string? sourceId, IDbConnection connection,
         IDbTransaction? transaction = null);
-
-    /// <summary>
-    /// Adds a collection of <see cref="InventoryItem"/> objects to the database asynchronously.
-    /// </summary>
-    /// <param name="inventoryItems">
-    /// A collection of <see cref="InventoryItem"/> objects to be added to the database.
-    /// </param>
-    /// <returns>
-    /// A <see cref="Task"/> representing the asynchronous operation.
-    /// </returns>
-    /// <remarks>
-    /// This method processes the provided collection of inventory items and adds them to the database
-    /// within a single transaction. If any error occurs during the operation, the transaction is rolled back.
-    /// </remarks>
-    /// <exception cref="ArgumentNullException">
-    /// Thrown when <paramref name="inventoryItems"/> is <c>null</c>.
-    /// </exception>
-    /// <exception cref="Exception">
-    /// Thrown when an error occurs during the database operation.
-    /// </exception>
-    Task<InventoryImportResult> ImportAsync(IEnumerable<InventoryItem> inventoryItems);
 }
