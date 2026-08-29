@@ -52,6 +52,10 @@ internal static class Program {
             .As<IInventorySourceRepository>()
             .InstancePerDependency();
 
+        builder.RegisterType<InventoryItemRepository>()
+            .As<IInventoryItemRepository>()
+            .InstancePerDependency();
+
         builder.RegisterType<DatabaseInitializer>()
             .AsSelf()
             .InstancePerDependency();
