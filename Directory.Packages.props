@@ -3,6 +3,7 @@
     <PackageVersion Include="Autofac" Version="8.1.1" />
     <PackageVersion Include="CsvHelper" Version="33.1.0" />
     <PackageVersion Include="Dapper" Version="2.1.79" />
+    <PackageVersion Include="Serilog" Version="4.4.0" />
     <PackageVersion Include="ZXing.Net" Version="0.16.11" />
     <PackageVersion Include="Microsoft.Data.Sqlite" Version="9.0.0" />
     <PackageVersion Include="System.Drawing.Common" Version="10.0.9" />
