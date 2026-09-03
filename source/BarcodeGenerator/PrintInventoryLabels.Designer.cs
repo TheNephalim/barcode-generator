@@ -30,13 +30,16 @@
             btnPrint = new Button();
             txtInventoryFilter = new TextBox();
             btnClear = new Button();
+            dateTimePicker1 = new DateTimePicker();
+            label2 = new Label();
+            chkFilterByDate = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // dataGridView1
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(24, 94);
+            dataGridView1.Location = new Point(24, 154);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.Size = new Size(749, 222);
             dataGridView1.TabIndex = 0;
@@ -48,7 +51,7 @@
             chkSelectAllItems.CheckState = CheckState.Checked;
             chkSelectAllItems.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             chkSelectAllItems.ForeColor = Color.White;
-            chkSelectAllItems.Location = new Point(24, 67);
+            chkSelectAllItems.Location = new Point(24, 115);
             chkSelectAllItems.Name = "chkSelectAllItems";
             chkSelectAllItems.Size = new Size(84, 21);
             chkSelectAllItems.TabIndex = 1;
@@ -91,7 +94,7 @@
             // 
             // txtInventoryFilter
             // 
-            txtInventoryFilter.Location = new Point(75, 26);
+            txtInventoryFilter.Location = new Point(147, 26);
             txtInventoryFilter.Name = "txtInventoryFilter";
             txtInventoryFilter.Size = new Size(290, 23);
             txtInventoryFilter.TabIndex = 5;
@@ -100,13 +103,47 @@
             // btnClear
             // 
             btnClear.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnClear.Location = new Point(389, 22);
+            btnClear.Location = new Point(549, 26);
             btnClear.Name = "btnClear";
-            btnClear.Size = new Size(75, 25);
+            btnClear.Size = new Size(123, 25);
             btnClear.TabIndex = 6;
-            btnClear.Text = "Clear";
+            btnClear.Text = "Clear Filters";
             btnClear.UseVisualStyleBackColor = true;
             btnClear.Click += btnClear_Click;
+            // 
+            // dateTimePicker1
+            // 
+            dateTimePicker1.CustomFormat = "MM/dd/yyyy";
+            dateTimePicker1.Format = DateTimePickerFormat.Custom;
+            dateTimePicker1.Location = new Point(147, 67);
+            dateTimePicker1.Name = "dateTimePicker1";
+            dateTimePicker1.Size = new Size(115, 23);
+            dateTimePicker1.TabIndex = 7;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.ForeColor = Color.White;
+            label2.Location = new Point(24, 67);
+            label2.Name = "label2";
+            label2.Size = new Size(102, 17);
+            label2.TabIndex = 8;
+            label2.Text = "Imported Date:";
+            // 
+            // chkFilterByDate
+            // 
+            chkFilterByDate.AllowDrop = true;
+            chkFilterByDate.AutoSize = true;
+            chkFilterByDate.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            chkFilterByDate.ForeColor = Color.White;
+            chkFilterByDate.Location = new Point(282, 70);
+            chkFilterByDate.Name = "chkFilterByDate";
+            chkFilterByDate.Size = new Size(111, 21);
+            chkFilterByDate.TabIndex = 9;
+            chkFilterByDate.Text = "Filter By Date";
+            chkFilterByDate.UseVisualStyleBackColor = true;
+            chkFilterByDate.CheckedChanged += chkFilterByDate_CheckedChanged;
             // 
             // PrintInventoryLabels
             // 
@@ -114,6 +151,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Green;
             ClientSize = new Size(800, 450);
+            Controls.Add(chkFilterByDate);
+            Controls.Add(label2);
+            Controls.Add(dateTimePicker1);
             Controls.Add(btnClear);
             Controls.Add(txtInventoryFilter);
             Controls.Add(btnPrint);
@@ -138,5 +178,8 @@
         private Button btnPrint;
         private TextBox txtInventoryFilter;
         private Button btnClear;
+        private DateTimePicker dateTimePicker1;
+        private Label label2;
+        private CheckBox chkFilterByDate;
     }
 }
