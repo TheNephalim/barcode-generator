@@ -70,6 +70,18 @@ public partial class ImportFlipwiseInventoryExport : Form {
     private async void btnCommitImport_Click(object sender, EventArgs e) {
         try {
             var recordList = (BindingList<InventoryItem>)dataGridView1.DataSource;
+
+            if (recordList == null || recordList.Count == 0) {
+                MessageBox.Show("No data to commit. Please open a file first.", "No Data", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                return;
+            }
+
+            foreach (var item in recordList) {
+                var sku = Guid.NewGuid().ToString("N")[..10];
+                item.CustomSku = sku;
+            }
+
             var importResults = await _inventoryItemRepository.ImportAsync(recordList);
             MessageBox.Show(
                 $"Import complete: {importResults.RecordsAdded} added, {importResults.RecordsProcessed} processed, Already Imported:  {importResults.ExistingRecords}, Possible Relists:  {importResults.PossibleRelists}, Source Conflicts: {importResults.SourceConflicts}.",
