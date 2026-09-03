@@ -105,29 +105,9 @@ public sealed class DatabaseInitializer {
                                SourceDataJson TEXT,
                                ImportedAt TEXT NOT NULL,
                                CreatedAt TEXT NOT NULL,
-                               ModifiedAt TEXT NOT NULL
+                               ModifiedAt TEXT NOT NULL,
+                               Quantity INTEGER NOT NULL DEFAULT 1
                            );
-
-                           CREATE TABLE IF NOT EXISTS InventoryImportStaging
-                           (
-                               Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                               ImportBatchId TEXT NOT NULL,
-                               Sku TEXT,
-                               Title TEXT,
-                               Price REAL,
-                               AcquisitionCost REAL,
-                               AcquisitionDate TEXT,
-                               AcquisitionSource TEXT,
-                               StorageLocation TEXT,
-                               OriginalSourceJson TEXT NOT NULL,
-                               ImportStatus TEXT NOT NULL,
-                               ValidationMessage TEXT,
-                               CreatedAt TEXT NOT NULL
-                           );
-
-                           CREATE UNIQUE INDEX IF NOT EXISTS UX_Inventory_Source
-                           ON InventoryItem(SourceSystem, SourceRecordId)
-                           WHERE SourceRecordId IS NOT NULL;
                            """;
 
         connection.Execute(sql);
