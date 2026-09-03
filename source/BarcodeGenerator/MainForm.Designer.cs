@@ -42,8 +42,6 @@
             printTestLabelToolStripMenuItem = new ToolStripMenuItem();
             maintenanceToolStripMenuItem = new ToolStripMenuItem();
             inventorySourcesToolStripMenuItem = new ToolStripMenuItem();
-            labelTemplatesToolStripMenuItem = new ToolStripMenuItem();
-            printerSettingsToolStripMenuItem = new ToolStripMenuItem();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             scannerTestToolStripMenuItem = new ToolStripMenuItem();
             resetLastNumberToolStripMenuItem = new ToolStripMenuItem();
@@ -53,6 +51,9 @@
             helpToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             errorProvider1 = new ErrorProvider(components);
+            btnLaunchPrintInventoryLabels = new Button();
+            label1 = new Label();
+            clearAllInventoryToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
@@ -60,15 +61,17 @@
             // lblLaunchBarcodeGenerator
             // 
             lblLaunchBarcodeGenerator.AutoSize = true;
+            lblLaunchBarcodeGenerator.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblLaunchBarcodeGenerator.ForeColor = Color.White;
             lblLaunchBarcodeGenerator.Location = new Point(12, 54);
             lblLaunchBarcodeGenerator.Name = "lblLaunchBarcodeGenerator";
-            lblLaunchBarcodeGenerator.Size = new Size(201, 15);
+            lblLaunchBarcodeGenerator.Size = new Size(236, 17);
             lblLaunchBarcodeGenerator.TabIndex = 0;
             lblLaunchBarcodeGenerator.Text = "Launch the Barcode Label Generator:";
             // 
             // btnLaunchBarcodeLabelGenerator
             // 
-            btnLaunchBarcodeLabelGenerator.Location = new Point(219, 50);
+            btnLaunchBarcodeLabelGenerator.Location = new Point(254, 55);
             btnLaunchBarcodeLabelGenerator.Name = "btnLaunchBarcodeLabelGenerator";
             btnLaunchBarcodeLabelGenerator.Size = new Size(75, 23);
             btnLaunchBarcodeLabelGenerator.TabIndex = 1;
@@ -79,15 +82,17 @@
             // lblLaunchPriceLabelGenerator
             // 
             lblLaunchPriceLabelGenerator.AutoSize = true;
-            lblLaunchPriceLabelGenerator.Location = new Point(12, 86);
+            lblLaunchPriceLabelGenerator.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblLaunchPriceLabelGenerator.ForeColor = Color.White;
+            lblLaunchPriceLabelGenerator.Location = new Point(12, 92);
             lblLaunchPriceLabelGenerator.Name = "lblLaunchPriceLabelGenerator";
-            lblLaunchPriceLabelGenerator.Size = new Size(184, 15);
+            lblLaunchPriceLabelGenerator.Size = new Size(217, 17);
             lblLaunchPriceLabelGenerator.TabIndex = 2;
             lblLaunchPriceLabelGenerator.Text = "Launch the Price Label Generator:";
             // 
             // btnLaunchPriceLabelGenerator
             // 
-            btnLaunchPriceLabelGenerator.Location = new Point(219, 82);
+            btnLaunchPriceLabelGenerator.Location = new Point(254, 92);
             btnLaunchPriceLabelGenerator.Name = "btnLaunchPriceLabelGenerator";
             btnLaunchPriceLabelGenerator.Size = new Size(75, 23);
             btnLaunchPriceLabelGenerator.TabIndex = 3;
@@ -151,7 +156,7 @@
             // 
             // maintenanceToolStripMenuItem
             // 
-            maintenanceToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { inventorySourcesToolStripMenuItem, labelTemplatesToolStripMenuItem, printerSettingsToolStripMenuItem });
+            maintenanceToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { inventorySourcesToolStripMenuItem, clearAllInventoryToolStripMenuItem });
             maintenanceToolStripMenuItem.Name = "maintenanceToolStripMenuItem";
             maintenanceToolStripMenuItem.Size = new Size(88, 20);
             maintenanceToolStripMenuItem.Text = "Maintenance";
@@ -159,21 +164,9 @@
             // inventorySourcesToolStripMenuItem
             // 
             inventorySourcesToolStripMenuItem.Name = "inventorySourcesToolStripMenuItem";
-            inventorySourcesToolStripMenuItem.Size = new Size(168, 22);
+            inventorySourcesToolStripMenuItem.Size = new Size(180, 22);
             inventorySourcesToolStripMenuItem.Text = "Inventory Sources";
             inventorySourcesToolStripMenuItem.Click += inventorySourcesToolStripMenuItem_Click;
-            // 
-            // labelTemplatesToolStripMenuItem
-            // 
-            labelTemplatesToolStripMenuItem.Name = "labelTemplatesToolStripMenuItem";
-            labelTemplatesToolStripMenuItem.Size = new Size(168, 22);
-            labelTemplatesToolStripMenuItem.Text = "Label Templates";
-            // 
-            // printerSettingsToolStripMenuItem
-            // 
-            printerSettingsToolStripMenuItem.Name = "printerSettingsToolStripMenuItem";
-            printerSettingsToolStripMenuItem.Size = new Size(168, 22);
-            printerSettingsToolStripMenuItem.Text = "Printer Settings";
             // 
             // toolsToolStripMenuItem
             // 
@@ -230,12 +223,42 @@
             // 
             errorProvider1.ContainerControl = this;
             // 
+            // btnLaunchPrintInventoryLabels
+            // 
+            btnLaunchPrintInventoryLabels.Location = new Point(254, 130);
+            btnLaunchPrintInventoryLabels.Name = "btnLaunchPrintInventoryLabels";
+            btnLaunchPrintInventoryLabels.Size = new Size(75, 23);
+            btnLaunchPrintInventoryLabels.TabIndex = 5;
+            btnLaunchPrintInventoryLabels.Text = "Launch";
+            btnLaunchPrintInventoryLabels.UseVisualStyleBackColor = true;
+            btnLaunchPrintInventoryLabels.Click += btnLaunchPrintInventoryLabels_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.ForeColor = Color.White;
+            label1.Location = new Point(12, 132);
+            label1.Name = "label1";
+            label1.Size = new Size(193, 17);
+            label1.TabIndex = 6;
+            label1.Text = "Launch Print Inventory Labels";
+            // 
+            // clearAllInventoryToolStripMenuItem
+            // 
+            clearAllInventoryToolStripMenuItem.Name = "clearAllInventoryToolStripMenuItem";
+            clearAllInventoryToolStripMenuItem.Size = new Size(180, 22);
+            clearAllInventoryToolStripMenuItem.Text = "Clear All Inventory";
+            clearAllInventoryToolStripMenuItem.Click += ClearAllInventoryToolStripMenuItem_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.DarkSeaGreen;
             ClientSize = new Size(800, 212);
+            Controls.Add(label1);
+            Controls.Add(btnLaunchPrintInventoryLabels);
             Controls.Add(btnLaunchPriceLabelGenerator);
             Controls.Add(lblLaunchPriceLabelGenerator);
             Controls.Add(btnLaunchBarcodeLabelGenerator);
@@ -268,8 +291,6 @@
         private ToolStripMenuItem printTestLabelToolStripMenuItem;
         private ToolStripMenuItem maintenanceToolStripMenuItem;
         private ToolStripMenuItem inventorySourcesToolStripMenuItem;
-        private ToolStripMenuItem labelTemplatesToolStripMenuItem;
-        private ToolStripMenuItem printerSettingsToolStripMenuItem;
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripMenuItem scannerTestToolStripMenuItem;
         private ToolStripMenuItem resetLastNumberToolStripMenuItem;
@@ -279,5 +300,8 @@
         private ToolStripMenuItem aboutToolStripMenuItem;
         private ToolStripMenuItem importFlipwiseInventoryExportToolStripMenuItem;
         private ErrorProvider errorProvider1;
+        private Label label1;
+        private Button btnLaunchPrintInventoryLabels;
+        private ToolStripMenuItem clearAllInventoryToolStripMenuItem;
     }
 }
