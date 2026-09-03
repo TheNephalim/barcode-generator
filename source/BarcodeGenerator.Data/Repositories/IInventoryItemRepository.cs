@@ -49,6 +49,41 @@ public interface IInventoryItemRepository {
     Task AddInventoryItemAsync(InventoryItem inventoryItem, IDbConnection connection, IDbTransaction transaction);
 
     /// <summary>
+    /// Clears all inventory items from the database.
+    /// </summary>
+    /// <remarks>
+    /// This method removes all records from the inventory storage.
+    /// It is intended to be used with caution as it will delete all inventory data.
+    /// </remarks>
+    /// <exception cref="System.Exception">
+    /// Thrown if an error occurs during the operation.
+    /// </exception>
+    /// <returns>
+    /// A <see cref="System.Threading.Tasks.Task"/> that represents the asynchronous operation.
+    /// </returns>
+    Task ClearAllInventory();
+
+    /// <summary>
+    /// Retrieves all inventory items from the database.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result contains a list of
+    /// <see cref="BarcodeGenerator.Entities.InventoryLabelRow"/> objects representing the inventory items.
+    /// </returns>
+    /// <remarks>
+    /// This method executes a query to fetch all inventory items and maps the results to
+    /// <see cref="BarcodeGenerator.Entities.InventoryLabelRow"/> objects. It utilizes a database connection
+    /// created by the <see cref="BarcodeGenerator.Data.Database.IDbConnectionFactory"/>.
+    /// </remarks>
+    /// <exception cref="System.InvalidOperationException">
+    /// Thrown if the database connection cannot be established.
+    /// </exception>
+    /// <exception cref="System.Data.SqlClient.SqlException">
+    /// Thrown if there is an error executing the SQL query.
+    /// </exception>
+    Task<IList<InventoryLabelRow>> GetAll();
+
+    /// <summary>
     /// Adds a collection of <see cref="InventoryItem"/> objects to the database asynchronously.
     /// </summary>
     /// <param name="inventoryItems">
