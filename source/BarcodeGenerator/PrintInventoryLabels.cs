@@ -56,6 +56,12 @@ public partial class PrintInventoryLabels : Form {
                      x.Source.Contains(filter, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        if (chkFilterByDate.Checked) {
+            filteredItems =
+                filteredItems.Where(x =>
+                    x.ImportedAt.HasValue && x.ImportedAt.Value.Date == dateTimePicker1.Value.Date);
+        }
+
         dataGridView1.DataSource =
             new BindingList<InventoryLabelRow>([.. filteredItems]);
     }
@@ -74,6 +80,7 @@ public partial class PrintInventoryLabels : Form {
     /// </remarks>
     private void btnClear_Click(object sender, EventArgs e) {
         txtInventoryFilter.Clear();
+        chkFilterByDate.Checked = false;
     }
 
     /// <summary>
@@ -99,6 +106,10 @@ public partial class PrintInventoryLabels : Form {
     /// </remarks>
     private void btnPrint_Click(object sender, EventArgs e) {
         MessageBox.Show("Print!", "Print!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
+    private void chkFilterByDate_CheckedChanged(object sender, EventArgs e) {
+        ApplyFilter();
     }
 
     /// <summary>
