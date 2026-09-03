@@ -53,5 +53,9 @@ public static class FormRegistrar {
         builder.RegisterType<ImportFlipwiseInventoryExport>()
             .AsSelf()
             .InstancePerDependency();
+
+        builder.RegisterType<PrintInventoryLabels>()
+            .AsSelf()
+            .InstancePerDependency();
     }
 }
