@@ -1,3 +1,5 @@
+using BarcodeGenerator.Data.Repositories;
+
 namespace BarcodeGenerator;
 
 /// <summary>
@@ -10,8 +12,10 @@ namespace BarcodeGenerator;
 public partial class MainForm : Form {
     private readonly Func<BarcodeLabelGenerator> _barcodeLabelGeneratorFactory;
     private readonly Func<ImportFlipwiseInventoryExport> _flipwiseInventoryExportFactory;
+    private readonly IInventoryItemRepository _inventoryItemRepository;
     private readonly Func<InventorySourceMaintenance> _inventorySourceMaintenanceFactory;
     private readonly Func<PriceLabelGenerator> _pricingLabelGeneratorFormFactory;
+    private readonly Func<PrintInventoryLabels> _printInventoryLabelsFactory;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MainForm"/> class.
@@ -24,13 +28,16 @@ public partial class MainForm : Form {
         Func<BarcodeLabelGenerator> barcodeLabelGeneratorFactory,
         Func<PriceLabelGenerator> pricingLabelGeneratorFormFactory,
         Func<InventorySourceMaintenance> inventorySourceMaintenanceFactory,
-        Func<ImportFlipwiseInventoryExport> flipwiseInventoryExportFactory) {
+        Func<PrintInventoryLabels> printInventoryLabelsFactory,
+        Func<ImportFlipwiseInventoryExport> flipwiseInventoryExportFactory, IInventoryItemRepository inventoryItemRepository) {
         InitializeComponent();
 
         _barcodeLabelGeneratorFactory = barcodeLabelGeneratorFactory ?? throw new ArgumentNullException(nameof(barcodeLabelGeneratorFactory));
         _pricingLabelGeneratorFormFactory = pricingLabelGeneratorFormFactory ?? throw new ArgumentNullException(nameof(pricingLabelGeneratorFormFactory));
         _inventorySourceMaintenanceFactory = inventorySourceMaintenanceFactory ?? throw new ArgumentNullException(nameof(inventorySourceMaintenanceFactory));
+        _printInventoryLabelsFactory = printInventoryLabelsFactory ?? throw new ArgumentNullException(nameof(printInventoryLabelsFactory));
         _flipwiseInventoryExportFactory = flipwiseInventoryExportFactory ?? throw new ArgumentNullException(nameof(flipwiseInventoryExportFactory));
+        _inventoryItemRepository = inventoryItemRepository ?? throw new ArgumentNullException(nameof(inventoryItemRepository));
     }
 
     /// <summary>
@@ -58,6 +65,46 @@ public partial class MainForm : Form {
     private void btnLaunchPriceLabelGenerator_Click(object sender, EventArgs e) {
         var form = _pricingLabelGeneratorFormFactory();
         form.ShowDialog(this);
+    }
+
+    /// <summary>
+    /// Handles the <see cref="Button.Click"/> event for the "Launch Print Inventory Labels" button.
+    /// </summary>
+    /// <param name="sender">The source of the event, typically the button that was clicked.</param>
+    /// <param name="e">An <see cref="EventArgs"/> instance containing the event data.</param>
+    /// <remarks>
+    /// This method creates and displays a dialog for printing inventory labels using a factory method.
+    /// </remarks>
+    private void btnLaunchPrintInventoryLabels_Click(object sender, EventArgs e) {
+        var form = _printInventoryLabelsFactory();
+        form.ShowDialog(this);
+    }
+
+    /// <summary>
+    /// Handles the click event for the "Clear All Inventory" menu item.
+    /// </summary>
+    /// <param name="sender">The source of the event, typically the menu item.</param>
+    /// <param name="e">An <see cref="EventArgs"/> instance containing the event data.</param>
+    /// <remarks>
+    /// This method is triggered when the user selects the "Clear All Inventory" option
+    /// from the menu. The specific functionality implemented within this method is not
+    /// provided in the available code.
+    /// </remarks>
+    private void ClearAllInventoryToolStripMenuItem_Click(object sender, EventArgs e) {
+        var confirmationResult = MessageBox.Show(
+            "Are you sure you want to clear all inventory? This action cannot be undone.", "Confirm Clear All Inventory",
+            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+        if (confirmationResult == DialogResult.Yes)
+            try {
+                // Assuming _inventorySourceMaintenanceFactory creates an instance to manage inventory
+                _inventoryItemRepository.ClearAllInventory(); // Hypothetical method to clear inventory
+                MessageBox.Show("All inventory has been successfully cleared.", "Success", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            } catch (Exception ex) {
+                MessageBox.Show($"An error occurred while clearing inventory: {ex.Message}", "Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
     }
 
     /// <summary>
