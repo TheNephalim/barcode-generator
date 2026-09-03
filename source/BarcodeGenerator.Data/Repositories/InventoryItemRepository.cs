@@ -68,16 +68,66 @@ public sealed class InventoryItemRepository : IInventoryItemRepository {
                                Sku, Title, Price, AcquisitionCost, AcquisitionDate,
                                AcquisitionSource, StorageLocation, SourceSystem,
                                SourceRecordId, ImportedAt,
-                               CreatedAt, ModifiedAt
+                               CreatedAt, ModifiedAt, Quantity
                            ) VALUES(
                              @CustomSku, @Product, @ListingPrice, @Cost,
                              @PurchaseDate, @PurchasedAt, @StorageLocation, @SourceSystem,
                              @SourceRecordId, datetime('now'), datetime('now'),
-                             datetime('now')
+                             datetime('now'), @QuantityRemaining
                            );
                            """;
 
         var result = await connection.ExecuteAsync(sql, inventoryItem);
+    }
+
+    /// <summary>
+    /// Deletes all inventory items from the database.
+    /// </summary>
+    /// <remarks>
+    /// This method removes all records from the InventoryItem table.
+    /// Use with caution as it will result in the loss of all inventory data.
+    /// </remarks>
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    public async Task ClearAllInventory() {
+        using var connection = _dbConnectionFactory.CreateConnection();
+        connection.Open();
+
+        const string sql = """
+                           DELETE FROM InventoryItem;
+                           """;
+
+        await connection.ExecuteAsync(sql);
+    }
+
+    /// <summary>
+    /// Retrieves all inventory items from the database.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result contains a list of
+    /// <see cref="BarcodeGenerator.Entities.InventoryLabelRow"/> objects representing the inventory items.
+    /// </returns>
+    /// <remarks>
+    /// This method executes a query to fetch all inventory items and maps the results to
+    /// <see cref="BarcodeGenerator.Entities.InventoryLabelRow"/> objects. It utilizes a database connection
+    /// created by the <see cref="BarcodeGenerator.Data.Database.IDbConnectionFactory"/>.
+    /// </remarks>
+    /// <exception cref="System.InvalidOperationException">
+    /// Thrown if the database connection cannot be established.
+    /// </exception>
+    /// <exception cref="System.Data.SqlClient.SqlException">
+    /// Thrown if there is an error executing the SQL query.
+    /// </exception>
+    public async Task<IList<InventoryLabelRow>> GetAll() {
+        const string sql = """
+                           SELECT Id, Sku, Title, Price, ImportedAt, Quantity, Quantity As Copies
+                           FROM InventoryItem
+                           """;
+
+        using var connection = _dbConnectionFactory.CreateConnection();
+        connection.Open();
+
+        var inventoryItems = await connection.QueryAsync<InventoryLabelRow>(sql);
+        return [.. inventoryItems];
     }
 
     /// <summary>
