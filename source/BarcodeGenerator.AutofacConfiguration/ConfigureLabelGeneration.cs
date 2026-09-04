@@ -44,12 +44,12 @@ public sealed class ConfigureLabelGeneration : Module {
             .As<IRenderedBarcodeLabelGenerator>()
             .SingleInstance();
 
-        builder.RegisterType<OneByThreeLabelRenderer>()
-            .Keyed<ILabelRenderer>(LabelTemplateType.OneByThree)
+        builder.RegisterType<VinylBarcodeLabelRenderer>()
+            .Keyed<ILabelRenderer>(LabelTemplateType.VinylBarcode)
             .InstancePerDependency();
 
-        builder.RegisterType<OneInchRoundPricingLabelRenderer>()
-            .Keyed<ILabelRenderer>(LabelTemplateType.OneInchRound)
+        builder.RegisterType<PricingLabelRenderer>()
+            .Keyed<ILabelRenderer>(LabelTemplateType.Pricing)
             .InstancePerDependency();
 
         builder.RegisterType<WindowsLabelPrinter>()
