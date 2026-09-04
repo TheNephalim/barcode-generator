@@ -25,6 +25,17 @@ public sealed class InventoryLabelRow {
     public int Copies { get; set; }
 
     /// <summary>
+    /// Gets or sets the unique identifier for the inventory label row.
+    /// </summary>
+    /// <value>
+    /// An <see cref="int"/> representing the unique identifier of this row.
+    /// </value>
+    /// <remarks>
+    /// This property is used to uniquely identify a specific row in the inventory label.
+    /// </remarks>
+    public int Id { get; set; }
+
+    /// <summary>
     /// Gets or sets the date when the inventory label was imported.
     /// </summary>
     /// <value>
@@ -57,6 +68,15 @@ public sealed class InventoryLabelRow {
     /// in user interfaces or processing logic.
     /// </remarks>
     public bool IsSelected { get; set; }
+
+    /// <summary>
+    /// Gets or sets the date and time when the label was printed.
+    /// </summary>
+    /// <value>
+    /// A <see cref="DateTime"/> value representing the timestamp of when the label was printed,
+    /// or <c>null</c> if the label has not been printed yet.
+    /// </value>
+    public DateTime? LabelPrintedAt { get; set; }
 
     /// <summary>
     /// Gets or sets the quantity of the inventory item.
