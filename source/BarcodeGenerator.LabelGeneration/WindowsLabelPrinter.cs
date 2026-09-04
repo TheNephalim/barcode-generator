@@ -122,8 +122,8 @@ public sealed class WindowsLabelPrinter(IRendererFactory rendererFactory) : ILab
     /// </example>
     private static string GetPaperName(LabelTemplateType templateType) {
         return templateType switch {
-            LabelTemplateType.OneByThree => "OneByThreeLabel",
-            LabelTemplateType.OneInchRound => "OneInchRoundLabel",
+            LabelTemplateType.VinylBarcode => "OneByThreeLabel",
+            LabelTemplateType.Pricing => "OneInchRoundLabel",
             _ => throw new ArgumentOutOfRangeException(nameof(templateType), templateType,
                 "Unsupported label template.")
         };
