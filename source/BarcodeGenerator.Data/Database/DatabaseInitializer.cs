@@ -106,7 +106,8 @@ public sealed class DatabaseInitializer {
                                ImportedAt TEXT NOT NULL,
                                CreatedAt TEXT NOT NULL,
                                ModifiedAt TEXT NOT NULL,
-                               Quantity INTEGER NOT NULL DEFAULT 1
+                               Quantity INTEGER NOT NULL DEFAULT 1,
+                               LabelPrintedAt Text
                            );
                            """;
 
