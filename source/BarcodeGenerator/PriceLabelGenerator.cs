@@ -57,14 +57,14 @@ public partial class PriceLabelGenerator : Form {
     /// </returns>
     /// <remarks>
     /// This method initializes a <see cref="LabelPrintJob"/> with a default label size of 100x100 and
-    /// a template type of <see cref="LabelTemplateType.OneInchRound"/>.
+    /// a template type of <see cref="LabelTemplateType.Pricing"/>.
     /// </remarks>
     private static LabelPrintJob CreateLabelPrintJob(int copies, PricingLabel pricingLabel) {
         var printJob = new LabelPrintJob() {
             Copies = copies,
             Labels = new List<IPrintableLabel>() { pricingLabel },
             LabelSize = new LabelSize() { Width = 100, Height = 100 },
-            TemplateType = LabelTemplateType.OneInchRound
+            TemplateType = LabelTemplateType.Pricing
         };
         return printJob;
     }
