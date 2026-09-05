@@ -1,6 +1,7 @@
 <Project>
   <ItemGroup>
     <PackageVersion Include="Autofac" Version="8.1.1" />
+    <PackageVersion Include="ClosedXML" Version="0.105.1" />
     <PackageVersion Include="CsvHelper" Version="33.1.0" />
     <PackageVersion Include="Dapper" Version="2.1.79" />
     <PackageVersion Include="Serilog" Version="4.4.0" />
