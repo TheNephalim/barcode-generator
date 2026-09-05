@@ -4,6 +4,7 @@
 // Created           : 08-29-2026
 // ***********************************************************************
 
+using BarcodeGenerator.Data.Database;
 using BarcodeGenerator.Data.Repositories.Results;
 using BarcodeGenerator.Entities;
 using System.Data;
@@ -79,6 +80,30 @@ public interface IInventoryItemRepository {
     /// </exception>
     Task<IList<InventoryLabelRow>> GetAll();
 
+    Task<HashSet<string>> GetExistingRecordIdentifiers();
+
+    /// <summary>
+    /// Retrieves a set of existing SKUs from the inventory.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="HashSet{T}"/> containing the SKUs that currently exist in the inventory.
+    /// </returns>
+    /// <remarks>
+    /// This method queries the database for all non-null SKUs in the <c>InventoryItem</c> table.
+    /// It establishes a database connection using the <see cref="IDbConnectionFactory"/> and ensures
+    /// that the connection is properly opened before executing the query.
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if the database connection cannot be established or the query execution fails.
+    /// </exception>
+    /// <example>
+    /// <code>
+    /// var repository = new InventoryItemRepository(dbConnectionFactory);
+    /// HashSet<string> existingSkus = await repository.GetExistingSkus();
+    /// </code>
+    /// </example>
+    Task<HashSet<string>> GetExistingSkus();
+
     /// <summary>
     /// Adds a collection of <see cref="InventoryItem"/> objects to the database asynchronously.
     /// </summary>
@@ -99,6 +124,18 @@ public interface IInventoryItemRepository {
     /// Thrown when an error occurs during the database operation.
     /// </exception>
     Task<InventoryImportResult> ImportAsync(IEnumerable<InventoryItem> inventoryItems);
+
+    /// <summary>
+    /// Marks the specified inventory items as having their labels printed.
+    /// </summary>
+    /// <param name="inventoryItemIds">An array of inventory item IDs whose labels have been printed.</param>
+    /// <param name="now">The current date and time when the labels were printed.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <remarks>
+    /// This method updates the database to indicate that the labels for the specified inventory items
+    /// have been printed. It is typically called after a successful label printing operation.
+    /// </remarks>
+    Task MarkLabelsPrintedAsync(int[] inventoryItemIds, DateTime now);
 
     /// <summary>
     /// Checks whether an inventory item with the specified SKU exists in the database.

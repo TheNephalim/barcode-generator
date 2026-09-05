@@ -119,7 +119,7 @@ public sealed class InventoryItemRepository : IInventoryItemRepository {
     /// </exception>
     public async Task<IList<InventoryLabelRow>> GetAll() {
         const string sql = """
-                           SELECT Id, Sku, Title, Price, ImportedAt, Quantity, Quantity As Copies
+                           SELECT Id, Sku, Title, Price, ImportedAt, Quantity, Quantity As Copies, LabelPrintedAt
                            FROM InventoryItem
                            """;
 
@@ -128,6 +128,68 @@ public sealed class InventoryItemRepository : IInventoryItemRepository {
 
         var inventoryItems = await connection.QueryAsync<InventoryLabelRow>(sql);
         return [.. inventoryItems];
+    }
+
+    /// <summary>
+    /// Retrieves a set of existing record identifiers from the inventory database.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="HashSet{T}"/> containing unique identifiers of existing records.
+    /// </returns>
+    /// <remarks>
+    /// This method queries the database for non-null values in the <c>SourceRecordId</c> column
+    /// of the <c>InventoryItem</c> table. It ensures that only distinct identifiers are returned.
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if the database connection could not be established.
+    /// </exception>
+    /// <exception cref="SqlException">
+    /// Thrown if an error occurs while executing the SQL query.
+    /// </exception>
+    public async Task<HashSet<string>> GetExistingRecordIdentifiers() {
+        const string sql = """
+                           SELECT SourceRecordId
+                           FROM InventoryItem
+                           WHERE SourceRecordId IS NOT NULL;
+                           """;
+
+        using var connection = _dbConnectionFactory.CreateConnection();
+        connection.Open();
+
+        return [.. await connection.QueryAsync<string>(sql)];
+    }
+
+    /// <summary>
+    /// Retrieves a set of existing SKUs from the inventory.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="HashSet{T}"/> containing the SKUs that currently exist in the inventory.
+    /// </returns>
+    /// <remarks>
+    /// This method queries the database for all non-null SKUs in the <c>InventoryItem</c> table.
+    /// It establishes a database connection using the <see cref="IDbConnectionFactory"/> and ensures
+    /// that the connection is properly opened before executing the query.
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if the database connection cannot be established or the query execution fails.
+    /// </exception>
+    /// <example>
+    /// <code>
+    /// var repository = new InventoryItemRepository(dbConnectionFactory);
+    /// HashSet<string> existingSkus = await repository.GetExistingSkus();
+    /// </code>
+    /// </example>
+    public async Task<HashSet<string>> GetExistingSkus() {
+        const string sql = """
+                           SELECT Sku
+                           FROM InventoryItem
+                           WHERE Sku IS NOT NULL;
+                           """;
+
+        using var connection = _dbConnectionFactory.CreateConnection();
+        connection.Open();
+
+        return [.. await connection.QueryAsync<string>(sql)];
     }
 
     /// <summary>
@@ -201,6 +263,48 @@ public sealed class InventoryItemRepository : IInventoryItemRepository {
         }
 
         return results;
+    }
+
+    /// <summary>
+    /// Marks the specified inventory items as having their labels printed by updating their last label print date.
+    /// </summary>
+    /// <param name="inventoryItemIds">An array of inventory item IDs to update. Cannot be <c>null</c>.</param>
+    /// <param name="printedDate">The date and time when the labels were printed.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="inventoryItemIds"/> is <c>null</c>.</exception>
+    /// <remarks>
+    /// This method ensures that the provided inventory item IDs are distinct and processes them in chunks of 500
+    /// to optimize database updates. The operation is performed within a database transaction to ensure consistency.
+    /// </remarks>
+    public async Task MarkLabelsPrintedAsync(int[] inventoryItemIds, DateTime printedDate) {
+        ArgumentNullException.ThrowIfNull(inventoryItemIds);
+
+        var ids = inventoryItemIds.Distinct().ToArray();
+
+        if (ids.Length == 0) {
+            return;
+        }
+
+        using var connection = _dbConnectionFactory.CreateConnection();
+        connection.Open();
+
+        using var transaction = connection.BeginTransaction();
+
+        const string sql = """
+                           UPDATE InventoryItem
+                           SET LabelPrintedAt = @PrintedDate
+                           WHERE Id in @IDs;
+                           """;
+
+        try {
+            foreach (var chunk in ids.Chunk(500)) {
+                await connection.ExecuteAsync(sql, new { IDs = chunk, PrintedDate = printedDate }, transaction);
+            }
+
+            transaction.Commit();
+        } catch (Exception exception) {
+            transaction.Rollback();
+            throw;
+        }
     }
 
     /// <summary>
