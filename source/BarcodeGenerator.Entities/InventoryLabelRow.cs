@@ -79,6 +79,17 @@ public sealed class InventoryLabelRow {
     public DateTime? LabelPrintedAt { get; set; }
 
     /// <summary>
+    /// Gets or sets the price of the inventory item.
+    /// </summary>
+    /// <value>
+    /// The price of the inventory item, represented as a decimal value.
+    /// </value>
+    /// <remarks>
+    /// This property is used to store the monetary value associated with the inventory item.
+    /// </remarks>
+    public decimal Price { get; set; }
+
+    /// <summary>
     /// Gets or sets the quantity of the inventory item.
     /// </summary>
     /// <value>
