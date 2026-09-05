@@ -3,10 +3,6 @@
 // Author            : Robert Eberhart
 // Created           : 08-07-2026
 // ***********************************************************************
-// <copyright file="PriceOption.cs" company="Littoral Combat Ships">
-//     Copyright (c) 2026 Littoral Combat Ships. All rights reserved.
-// </copyright>
-// ***********************************************************************
 namespace BarcodeGenerator.Entities;
 
 /// <summary>
