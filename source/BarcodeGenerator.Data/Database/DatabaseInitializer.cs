@@ -109,6 +109,18 @@ public sealed class DatabaseInitializer {
                                Quantity INTEGER NOT NULL DEFAULT 1,
                                LabelPrintedAt Text
                            );
+
+                           CREATE TABLE IF NOT EXISTS InventorySkuSequence (
+                               Id INTEGER PRIMARY KEY,
+                               Prefix TEXT NOT NULL,
+                               InventorySourceId INTEGER NOT NULL,
+                               LastAssignedNumber INTEGER NOT NULL DEFAULT 0,
+
+                               UNIQUE (Prefix, InventorySourceId),
+
+                               FOREIGN KEY (InventorySourceId)
+                                   REFERENCES InventorySource(Id)
+                           );
                            """;
 
         connection.Execute(sql);
