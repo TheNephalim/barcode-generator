@@ -39,16 +39,16 @@ public sealed class BarcodeImageGenerator : IBarcodeImageGenerator {
     /// This method uses the ZXing library to generate a Code 128 barcode image with predefined dimensions and margins.
     /// </remarks>
     public Bitmap GenerateCode128(string barcodeValue, int width, int height) {
-        ArgumentNullException.ThrowIfNullOrEmpty(barcodeValue);
+        ArgumentException.ThrowIfNullOrEmpty(barcodeValue);
         ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(width, 0);
         ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(height, 0);
 
         var writer = new BarcodeWriter<Bitmap>() {
             Format = BarcodeFormat.CODE_128,
             Options = new EncodingOptions() {
-                Height = height,
                 Width = width,
-                Margin = 20,
+                Height = height,
+                Margin = 10,
                 PureBarcode = true
             },
             Renderer = new BitmapRenderer()
