@@ -52,6 +52,10 @@ public sealed class ConfigureLabelGeneration : Module {
             .Keyed<ILabelRenderer>(LabelTemplateType.Pricing)
             .InstancePerDependency();
 
+        builder.RegisterType<InventoryLabelRenderer>()
+            .Keyed<ILabelRenderer>(LabelTemplateType.Inventory)
+            .InstancePerDependency();
+
         builder.RegisterType<WindowsLabelPrinter>()
             .As<ILabelPrinter>()
             .InstancePerDependency();
@@ -62,6 +66,10 @@ public sealed class ConfigureLabelGeneration : Module {
 
         builder.RegisterType<LabelPrinterFactory>()
             .As<ILabelPrinterFactory>()
+            .InstancePerDependency();
+
+        builder.RegisterType<RenderedInventoryLabelGenerator>()
+            .As<IRenderedInventoryLabelGenerator>()
             .InstancePerDependency();
     }
 }
