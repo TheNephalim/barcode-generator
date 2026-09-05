@@ -30,15 +30,6 @@ public sealed class RenderedInventoryLabel : IPrintableLabel, IDisposable {
     public Bitmap BarcodeImage { get; set; } = new Bitmap(1, 1);
 
     /// <summary>
-    /// Gets or sets the display text associated with the rendered barcode label.
-    /// </summary>
-    /// <remarks>
-    /// This text is typically displayed alongside the barcode image to provide additional context or information.
-    /// It is rendered using the <see cref="TwoByOneLabelRenderer"/> or similar rendering implementations.
-    /// </remarks>
-    public string? DisplayText { get; set; }
-
-    /// <summary>
     /// Gets or sets the inventory label associated with the rendered barcode.
     /// </summary>
     /// <remarks>
