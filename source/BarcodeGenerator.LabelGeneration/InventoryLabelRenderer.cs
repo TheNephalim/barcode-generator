@@ -3,15 +3,19 @@
 // Author            : Robert Eberhart
 // Created           : 09-04-2026
 // ***********************************************************************
-// <copyright file="InventoryLabelRenderer.cs" company="Littoral Combat Ships">
-//     Copyright (c) 2026 Littoral Combat Ships. All rights reserved.
-// </copyright>
-// ***********************************************************************
 
 using BarcodeGenerator.Entities;
 
 namespace BarcodeGenerator.LabelGeneration;
 
+/// <summary>
+/// Provides functionality to render inventory barcode labels onto a graphical surface.
+/// </summary>
+/// <remarks>
+/// This class is a specific implementation of the <see cref="ILabelRenderer"/> interface, designed
+/// to handle the rendering of inventory labels. It utilizes the <see cref="LabelTemplateType.Inventory"/>
+/// template type to ensure proper formatting and layout of inventory labels.
+/// </remarks>
 public sealed class InventoryLabelRenderer : ILabelRenderer {
     public LabelTemplateType TemplateType => LabelTemplateType.Inventory;
 
