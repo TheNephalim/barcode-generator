@@ -56,11 +56,17 @@ public class RenderedBarcodeLabelGenerator : IRenderedBarcodeLabelGenerator {
     /// a list of rendered barcode labels.
     /// </remarks>
     public IList<RenderedBarcodeLabel> Generate(IEnumerable<BarcodeLabel> labels) {
-        return labels
-            .Select(label => new RenderedBarcodeLabel() {
-                Label = label,
-                BarcodeImage = _barcodeImageGenerator.GenerateCode128(label.BarcodeValue, 2400, 240),
-                DisplayText = label.BarcodeValue
-            }).ToList();
+        _barcodeImageGenerator.SaveCode128Png(
+            "f4f70e1600",
+            @"C:\Temp\barcode.png");
+
+        return [
+            .. labels
+                .Select(label => new RenderedBarcodeLabel() {
+                    Label = label,
+                    BarcodeImage = _barcodeImageGenerator.GenerateCode128(label.BarcodeValue, 400, 100),
+                    DisplayText = label.BarcodeValue
+                })
+        ];
     }
 }
