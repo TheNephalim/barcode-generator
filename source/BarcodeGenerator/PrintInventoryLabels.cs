@@ -1,5 +1,6 @@
 ﻿using BarcodeGenerator.Data.Repositories;
 using BarcodeGenerator.Entities;
+using BarcodeGenerator.LabelGeneration;
 using System.ComponentModel;
 
 // ReSharper disable AsyncVoidEventHandlerMethod
@@ -15,6 +16,8 @@ namespace BarcodeGenerator;
 /// </remarks>
 public partial class PrintInventoryLabels : Form {
     private readonly IInventoryItemRepository _inventoryItemRepository;
+    private readonly IRenderedInventoryLabelGenerator _inventoryLabelGenerator;
+    private readonly ILabelPrinter _labelPrinter;
     private IList<InventoryLabelRow> _allInventoryLabelRows = new List<InventoryLabelRow>();
 
     /// <summary>
@@ -26,11 +29,13 @@ public partial class PrintInventoryLabels : Form {
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="inventoryItemRepository"/> is <c>null</c>.
     /// </exception>
-    public PrintInventoryLabels(IInventoryItemRepository inventoryItemRepository) {
+    public PrintInventoryLabels(IInventoryItemRepository inventoryItemRepository, IRenderedInventoryLabelGenerator inventoryLabelGenerator, ILabelPrinter labelPrinter) {
         InitializeComponent();
         InitializeInventoryGrid();
 
         _inventoryItemRepository = inventoryItemRepository ?? throw new ArgumentNullException(nameof(inventoryItemRepository));
+        _inventoryLabelGenerator = inventoryLabelGenerator ?? throw new ArgumentNullException(nameof(inventoryLabelGenerator));
+        _labelPrinter = labelPrinter ?? throw new ArgumentNullException(nameof(labelPrinter));
     }
 
     /// <summary>
@@ -62,8 +67,34 @@ public partial class PrintInventoryLabels : Form {
                     x.ImportedAt.HasValue && x.ImportedAt.Value.Date == dateTimePicker1.Value.Date);
         }
 
+        if (chkIsPrinted.Checked) {
+            filteredItems = filteredItems.Where(x => !x.LabelPrintedAt.HasValue);
+        }
+
+        BindGrid([.. filteredItems]);
+    }
+
+    /// <summary>
+    /// Binds the provided collection of inventory label rows to the data grid view.
+    /// </summary>
+    /// <param name="rows">
+    /// The collection of <see cref="InventoryLabelRow"/> objects to display in the grid.
+    /// </param>
+    /// <remarks>
+    /// This method updates the data source of the grid with the provided rows and configures
+    /// the grid's selection behavior. It is typically used to refresh the displayed inventory
+    /// data after applying filters or loading new data.
+    /// </remarks>
+    private void BindGrid(IEnumerable<InventoryLabelRow> rows) {
+        dataGridView1.SelectionChanged -= DataGridView1_SelectionChanged;
+
         dataGridView1.DataSource =
-            new BindingList<InventoryLabelRow>([.. filteredItems]);
+            new BindingList<InventoryLabelRow>([.. rows]);
+
+        dataGridView1.MultiSelect = true;
+        dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+        dataGridView1.SelectionChanged += DataGridView1_SelectionChanged;
     }
 
     /// <summary>
@@ -81,6 +112,7 @@ public partial class PrintInventoryLabels : Form {
     private void btnClear_Click(object sender, EventArgs e) {
         txtInventoryFilter.Clear();
         chkFilterByDate.Checked = false;
+        comboFirstPrint.SelectedIndex = -1;
     }
 
     /// <summary>
@@ -104,10 +136,94 @@ public partial class PrintInventoryLabels : Form {
     /// This method is triggered when the user clicks the "Print" button. It displays a message box
     /// indicating that the print action has been initiated.
     /// </remarks>
-    private void btnPrint_Click(object sender, EventArgs e) {
-        MessageBox.Show("Print!", "Print!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    private async void btnPrint_Click(object sender, EventArgs e) {
+        dataGridView1.EndEdit();
+
+        var labelRows = (BindingList<InventoryLabelRow>)dataGridView1.DataSource;
+
+        if (labelRows.Count == 0) {
+            MessageBox.Show("No items selected to print.", "No Selection", MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+            return;
+        }
+
+        var labels = labelRows
+            .Where(x => x.IsSelected)
+            .SelectMany(x => {
+                var copies = x.Copies;
+                if (copies <= 1) {
+                    copies = 1;
+                }
+
+                var inventoryLabels = Enumerable.Range(0, copies).Select(_ => new InventoryLabel() {
+                    Sku = x.Sku,
+                    Title = x.Title,
+                    Price = x.Price,
+                    InventoryItemId = x.Id
+                });
+                return inventoryLabels;
+            }).ToList();
+
+        var renderedInventoryLabels = labels.Select(x => _inventoryLabelGenerator.Generate(x)).ToList();
+
+        var printJob = new LabelPrintJob() {
+            Labels = renderedInventoryLabels,
+            Copies = 1,
+            LabelSize = new LabelSize() {
+                Width = 200,
+                Height = 100
+            },
+            TemplateType = LabelTemplateType.Inventory
+        };
+
+        try {
+            _labelPrinter.Print(printJob);
+            var inventoryItemIds = renderedInventoryLabels
+                .Select(x => x.Label.InventoryItemId)
+                .Distinct()
+                .ToArray();
+
+            await _inventoryItemRepository.MarkLabelsPrintedAsync(inventoryItemIds,
+                DateTime.Now);
+
+            await LoadInventoryAsync();
+        } catch (Exception ex) {
+            MessageBox.Show($"Failed to print labels: {ex.Message}", "Printing Error", MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+            return;
+        } finally {
+            foreach (var label in renderedInventoryLabels) {
+                label.Dispose();
+            }
+
+            ApplyFilter();
+        }
+
+        MessageBox.Show("Inventory labels generated and sent to the printer successfully.", "Information", MessageBoxButtons.OKCancel);
     }
 
+    /// <summary>
+    /// Handles the <see cref="CheckBox.CheckedChanged"/> event for <c>checkBox1</c>.
+    /// </summary>
+    /// <param name="sender">The source of the event, typically the checkbox control.</param>
+    /// <param name="e">An <see cref="EventArgs"/> instance containing the event data.</param>
+    /// <remarks>
+    /// This method is triggered when the checked state of <c>checkBox1</c> changes.
+    /// It applies a filter by invoking the <see cref="ApplyFilter"/> method.
+    /// </remarks>
+    private void checkBox1_CheckedChanged(object sender, EventArgs e) {
+        ApplyFilter();
+    }
+
+    /// <summary>
+    /// Handles the <see cref="CheckBox.CheckedChanged"/> event for the <c>chkFilterByDate</c> control.
+    /// </summary>
+    /// <param name="sender">The source of the event, typically the <see cref="CheckBox"/> control.</param>
+    /// <param name="e">An <see cref="EventArgs"/> instance containing the event data.</param>
+    /// <remarks>
+    /// This method is triggered when the checked state of the <c>chkFilterByDate</c> checkbox changes.
+    /// It applies the appropriate filter based on the current state of the checkbox.
+    /// </remarks>
     private void chkFilterByDate_CheckedChanged(object sender, EventArgs e) {
         ApplyFilter();
     }
@@ -129,6 +245,67 @@ public partial class PrintInventoryLabels : Form {
         }
 
         dataGridView1.Refresh();
+    }
+
+    /// <summary>
+    /// Handles the <see cref="ComboBox.SelectedIndexChanged"/> event for the <c>comboFirstPrint</c> control.
+    /// </summary>
+    /// <param name="sender">The source of the event, typically the <see cref="ComboBox"/> control.</param>
+    /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
+    /// <remarks>
+    /// This method determines the selected value of the <c>comboFirstPrint</c> control and performs an action
+    /// based on the selected option. It supports predefined options such as selecting the first 25, 50, or 100 records,
+    /// or selecting all filtered records.
+    /// </remarks>
+    private void comboFirstPrint_SelectedIndexChanged(object sender, EventArgs e) {
+        var selectedOption = comboFirstPrint.SelectedItem;
+
+        if (selectedOption == null) return;
+
+        switch (selectedOption.ToString()) {
+            case "25":
+                SelectFirstRecords(25);
+                break;
+
+            case "50":
+                SelectFirstRecords(50);
+                break;
+
+            case "100":
+                SelectFirstRecords(100);
+                break;
+
+            case "All Filtered":
+                SelectAllFiltered();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Handles the <see cref="DataGridView.SelectionChanged"/> event for <c>dataGridView1</c>.
+    /// </summary>
+    /// <param name="sender">The source of the event, typically <c>dataGridView1</c>.</param>
+    /// <param name="args">An <see cref="EventArgs"/> instance containing the event data.</param>
+    /// <remarks>
+    /// This method toggles the selection state of rows in the DataGridView and updates the state of the "Select All" checkbox
+    /// based on whether all rows are selected.
+    /// </remarks>
+    private void DataGridView1_SelectionChanged(object? sender, EventArgs args) {
+        if (dataGridView1.SelectedRows.Count == 0) return;
+
+        for (var i = 0; i < dataGridView1.SelectedRows.Count; i++) {
+            var row = dataGridView1.SelectedRows[i];
+            if (row.DataBoundItem is InventoryLabelRow inventoryLabelRow) {
+                inventoryLabelRow.IsSelected = !inventoryLabelRow.IsSelected;
+            }
+        }
+
+        // Update the "Select All" checkbox state based on whether all rows are selected.
+        if (dataGridView1.DataSource is BindingList<InventoryLabelRow> rows && rows.Any()) {
+            chkSelectAllItems.Checked = rows.All(r => r.IsSelected);
+        } else {
+            chkSelectAllItems.Checked = false;
+        }
     }
 
     /// <summary>
@@ -186,10 +363,26 @@ public partial class PrintInventoryLabels : Form {
         });
 
         dataGridView1.Columns.Add(new DataGridViewTextBoxColumn {
+            Name = "Price",
+            HeaderText = "Price",
+            DataPropertyName = nameof(InventoryLabelRow.Price),
+            Width = 50,
+            ReadOnly = true
+        });
+
+        dataGridView1.Columns.Add(new DataGridViewTextBoxColumn {
             Name = "Copies",
             HeaderText = "Copies",
             DataPropertyName = nameof(InventoryLabelRow.Copies),
             Width = 60,
+            ReadOnly = false
+        });
+
+        dataGridView1.Columns.Add(new DataGridViewTextBoxColumn {
+            Name = "LastPrinted",
+            HeaderText = "Last Printed",
+            DataPropertyName = nameof(InventoryLabelRow.LabelPrintedAt),
+            Width = 100,
             ReadOnly = false
         });
     }
@@ -214,16 +407,26 @@ public partial class PrintInventoryLabels : Form {
     private async Task LoadInventoryAsync() {
         try {
             _allInventoryLabelRows = await _inventoryItemRepository.GetAll();
+            _allInventoryLabelRows = [.. _allInventoryLabelRows.OrderBy(x => x.Title)];
 
-            foreach (var row in _allInventoryLabelRows) {
-                row.IsSelected = true;
-            }
-
-            dataGridView1.DataSource = new BindingList<InventoryLabelRow>(_allInventoryLabelRows);
+            BindGrid(_allInventoryLabelRows);
         } catch (Exception ex) {
             MessageBox.Show("Could not load the inventory items", "Loading Error", MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
         }
+    }
+
+    /// <summary>
+    /// Populates the "Print First" combo box with predefined options.
+    /// </summary>
+    /// <remarks>
+    /// This method adds a set of predefined options to the <see cref="comboFirstPrint"/> combo box,
+    /// allowing the user to select the number of inventory labels to print first.
+    /// </remarks>
+    private void PopulatePrintFirst() {
+        object[] printFirstOptions = ["25", "50", "100", "All Filtered"];
+        comboFirstPrint.Items.AddRange(printFirstOptions);
+        comboFirstPrint.SelectedIndex = -1; // Default to the first option
     }
 
     /// <summary>
@@ -244,6 +447,52 @@ public partial class PrintInventoryLabels : Form {
     /// </exception>
     private async void PrintInventoryLabels_Load(object sender, EventArgs e) {
         await LoadInventoryAsync();
+        PopulatePrintFirst();
+    }
+
+    /// <summary>
+    /// Selects all filtered inventory label rows in the data grid.
+    /// </summary>
+    /// <remarks>
+    /// This method iterates through the filtered inventory label rows displayed in the data grid
+    /// and marks each row as selected. The data grid is then refreshed to reflect the changes.
+    /// </remarks>
+    private void SelectAllFiltered() {
+        if (dataGridView1.DataSource is not BindingList<InventoryLabelRow> filteredItems) {
+            return;
+        }
+
+        foreach (var row in filteredItems) {
+            row.IsSelected = true;
+        }
+
+        dataGridView1.Refresh();
+    }
+
+    /// <summary>
+    /// Selects the first specified number of records in the inventory label grid.
+    /// </summary>
+    /// <param name="count">
+    /// The number of records to select.
+    /// </param>
+    /// <remarks>
+    /// This method iterates through the data source of the inventory label grid, deselects all records,
+    /// and then selects the first <paramref name="count"/> records. The grid is refreshed after the selection.
+    /// </remarks>
+    private void SelectFirstRecords(int count) {
+        if (dataGridView1.DataSource is not BindingList<InventoryLabelRow> filteredItems) {
+            return;
+        }
+
+        foreach (var item in filteredItems) {
+            item.IsSelected = false;
+        }
+
+        foreach (var item in filteredItems.Take(count)) {
+            item.IsSelected = true;
+        }
+
+        dataGridView1.Refresh();
     }
 
     /// <summary>
