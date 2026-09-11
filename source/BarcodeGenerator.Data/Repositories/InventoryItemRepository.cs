@@ -7,6 +7,7 @@
 using BarcodeGenerator.Data.Database;
 using BarcodeGenerator.Data.Repositories.Results;
 using BarcodeGenerator.Entities;
+using BarcodeGenerator.Reporting.Contracts.Dtos;
 using Dapper;
 using System.Data;
 
@@ -127,6 +128,36 @@ public sealed class InventoryItemRepository : IInventoryItemRepository {
         connection.Open();
 
         var inventoryItems = await connection.QueryAsync<InventoryLabelRow>(sql);
+        return [.. inventoryItems];
+    }
+
+    /// <summary>
+    /// Retrieves all inventory items from the database and maps them to a report-friendly format.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result contains a list of
+    /// <see cref="BarcodeGenerator.Reporting.Contracts.Dtos.InventoryItemDto"/> objects, each representing an inventory item
+    /// with properties tailored for reporting purposes.
+    /// </returns>
+    /// <remarks>
+    /// This method executes a SQL query to fetch inventory item data and maps it to a collection of
+    /// <see cref="BarcodeGenerator.Reporting.Contracts.Dtos.InventoryItemDto"/> objects. The query includes fields such as
+    /// acquisition cost, SKU, product title, listing price, import date, quantity, acquisition source, purchase date,
+    /// source record ID, and source system.
+    /// </remarks>
+    /// <exception cref="System.Data.DataException">
+    /// Thrown if there is an issue executing the SQL query or mapping the results.
+    /// </exception>
+    public async Task<InventoryItemDto[]> GetAllAsReportDtoAsync() {
+        const string sql = """
+                           SELECT AcquisitionCost as Cost, Sku as CustomSku, Title as Product, Price as ListingPrice, ImportedAt, Quantity, AcquisitionSource as PurchasedAt, AcquisitionDate as PurchaseDate, SourceRecordId, SourceSystem
+                           FROM InventoryItem
+                           """;
+
+        using var connection = _dbConnectionFactory.CreateConnection();
+        connection.Open();
+
+        var inventoryItems = await connection.QueryAsync<InventoryItemDto>(sql);
         return [.. inventoryItems];
     }
 
