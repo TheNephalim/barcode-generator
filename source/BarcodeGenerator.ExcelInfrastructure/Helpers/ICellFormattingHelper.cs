@@ -7,8 +7,15 @@
 namespace BarcodeGenerator.ExcelInfrastructure.Helpers;
 
 /// <summary>
-/// Interface ICellFormattingHelper
+/// Provides methods for formatting Excel cells, including label and value cells.
 /// </summary>
+/// <remarks>
+/// This interface defines methods for applying specific formatting to Excel cells,
+/// such as labels and values, using parameter objects like
+/// <see cref="ExcelCellLabelParameters"/> and <see cref="ExcelCellValueParameters"/>.
+/// Implementations of this interface are used to ensure consistent styling and
+/// formatting across Excel worksheets.
+/// </remarks>
 public interface ICellFormattingHelper {
 
     /// <summary>
