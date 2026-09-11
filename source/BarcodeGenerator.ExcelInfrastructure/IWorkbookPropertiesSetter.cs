@@ -15,14 +15,6 @@ namespace BarcodeGenerator.ExcelInfrastructure;
 public interface IWorkbookPropertiesSetter {
 
     /// <summary>
-    /// Adds the application identifier to the workbook properties.
-    /// </summary>
-    /// <param name="applicationId">The application identifier.</param>
-    /// <returns>The current instance of <see cref="WorkbookPropertiesSetter"/>.</returns>
-    /// <exception cref="ArgumentException">Thrown when <paramref name="applicationId"/> is an empty GUID.</exception>
-    WorkbookPropertiesSetter AddApplicationId(Guid applicationId);
-
-    /// <summary>
     /// Adds the author.
     /// </summary>
     /// <param name="author">The author.</param>
@@ -69,5 +61,5 @@ public interface IWorkbookPropertiesSetter {
     /// Builds this instance.
     /// </summary>
     /// <returns>IXLWorkbook.</returns>
-    IXLWorkbook Set();
+    XLWorkbook Set();
 }
