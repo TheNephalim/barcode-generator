@@ -3,10 +3,6 @@
 // Author            : Robert Eberhart
 // Created           : 09-05-2026
 // ***********************************************************************
-// <copyright file="InventorySkuRepository.cs" company="Littoral Combat Ships">
-//     Copyright (c) 2026 Littoral Combat Ships. All rights reserved.
-// </copyright>
-// ***********************************************************************
 
 using BarcodeGenerator.Data.Database;
 using Dapper;
