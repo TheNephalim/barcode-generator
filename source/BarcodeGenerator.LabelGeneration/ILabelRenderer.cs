@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Assembly          : ${$NAMESPACE$}
+// Assembly          : BarcodeGenerator.LabelGeneration
 // Author            : Robert Eberhart
 // Created           : 06-11-2026
 // ***********************************************************************
