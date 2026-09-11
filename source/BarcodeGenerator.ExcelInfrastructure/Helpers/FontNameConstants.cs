@@ -7,16 +7,33 @@
 namespace BarcodeGenerator.ExcelInfrastructure.Helpers;
 
 /// <summary>
-/// Provides a collection of constant font names commonly used in Excel formatting.
+/// Provides a collection of constant values representing commonly used font names.
 /// </summary>
 /// <remarks>
-/// This class is designed to centralize font name constants for reuse across various
-/// Excel-related functionalities within the application. It includes popular font names
-/// such as Arial, Calibri, Courier New, and Times New Roman.
+/// This static class serves as a centralized repository for font name constants, ensuring consistency
+/// across the application when specifying font names. These constants are utilized in various classes
+/// and components, such as <see cref="ExcelCellValueParameters"/>, <see cref="ClosedXmlParameters"/>,
+/// <see cref="ExcelCellLabelParameters"/>, and <see cref="ExcelHeaderParameters{TAttribute}"/>, to
+/// define font-related properties.
 /// </remarks>
 public static class FontNameConstants {
+    /// <summary>
+    /// The arial
+    /// </summary>
     public const string Arial = "Arial";
+
+    /// <summary>
+    /// The calibri
+    /// </summary>
     public const string Calibri = "Calibri";
+
+    /// <summary>
+    /// The courier new
+    /// </summary>
     public const string CourierNew = "Courier New";
+
+    /// <summary>
+    /// The times new roman
+    /// </summary>
     public const string TimesNewRoman = "Times New Roman";
 }
