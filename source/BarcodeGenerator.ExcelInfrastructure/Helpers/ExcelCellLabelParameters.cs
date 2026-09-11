@@ -9,8 +9,13 @@ using ClosedXML.Excel;
 namespace BarcodeGenerator.ExcelInfrastructure.Helpers;
 
 /// <summary>
-/// Represents the parameters required for formatting and labeling an Excel cell.
+/// Represents the parameters required for configuring the appearance and layout of an Excel cell label.
 /// </summary>
+/// <remarks>
+/// This record encapsulates various properties such as font settings, cell dimensions, and worksheet references
+/// to facilitate consistent and customizable formatting of Excel cell labels. It is commonly used in conjunction
+/// with formatting helpers like <see cref="ICellFormattingHelper"/>.
+/// </remarks>
 public record ExcelCellLabelParameters {
     /// <summary>
     /// Gets or sets the color of the background.
