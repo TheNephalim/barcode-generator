@@ -4,18 +4,21 @@
 // Created          : 09-05-2026
 // ***********************************************************************
 
+using BarcodeGenerator.Reporting.Contracts.Enumerations;
 using ClosedXML.Excel;
 using System.Drawing;
 
 namespace BarcodeGenerator.ExcelInfrastructure.Helpers;
 
 /// <summary>
-/// Represents the parameters required for configuring and formatting an Excel cell.
+/// Represents the parameters required for configuring Excel headers in a worksheet.
 /// </summary>
+/// <typeparam name="TAttribute">
+/// The type of the attribute used to define header properties. This type must implement <see cref="IExcelColumnAttribute"/>.
+/// </typeparam>
 /// <remarks>
-/// This class provides properties to define various aspects of an Excel cell, such as its value,
-/// formatting, dimensions, and position within a worksheet. It is used in conjunction with helpers
-/// to apply consistent formatting and data representation in Excel sheets.
+/// This record is used to encapsulate all necessary information for adding headers to an Excel worksheet,
+/// such as workbook reference, worksheet number, header row configuration, and styling options.
 /// </remarks>
 public class ExcelCellValueParameters {
     /// <summary>
@@ -40,7 +43,7 @@ public class ExcelCellValueParameters {
     /// Gets or sets the type of the data.
     /// </summary>
     /// <value>The type of the data.</value>
-    public XLDataType DataType { get; set; }
+    public ExcelColumnDataType DataType { get; set; }
 
     /// <summary>
     /// Gets or sets the color of the font.
