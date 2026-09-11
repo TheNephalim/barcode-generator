@@ -35,7 +35,7 @@ public interface IExcelWorksheetBuilder<out TBuilderClass, in T> {
     /// Builds this instance.
     /// </summary>
     /// <returns>IXLWorkbook.</returns>
-    Task<IXLWorkbook> BuildAsync();
+    IXLWorkbook Build();
 
     /// <summary>
     /// Withes the header start number.
