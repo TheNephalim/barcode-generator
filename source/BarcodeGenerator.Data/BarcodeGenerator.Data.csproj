@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\barcodegenerator.entities\BarcodeGenerator.Entities.csproj" />
+    <ProjectReference Include="..\BarcodeGenerator.Reporting.Contracts\BarcodeGenerator.Reporting.Contracts.csproj" />
   </ItemGroup>
 
 </Project>
