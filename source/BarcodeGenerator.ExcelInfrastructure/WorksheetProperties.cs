@@ -4,13 +4,16 @@
 // Created          : 09-05-2026
 // ***********************************************************************
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace BarcodeGenerator.ExcelInfrastructure;
 
 /// <summary>
 /// Represents the properties of an Excel worksheet, including settings for freezing rows,
 /// repeating rows, and worksheet title.
 /// </summary>
-public class WorksheetProperties {
+[ExcludeFromCodeCoverage]
+public sealed class WorksheetProperties {
     /// <summary>
     /// Gets or sets the row index to freeze in the worksheet.
     /// </summary>
