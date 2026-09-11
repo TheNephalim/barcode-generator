@@ -1,8 +1,10 @@
 using Autofac;
 using Autofac.Builder;
 using Autofac.Features.Scanning;
+using BarcodeGenerator.Configuration;
 using BarcodeGenerator.Data.Database;
 using BarcodeGenerator.Data.Repositories;
+using Microsoft.Extensions.Configuration;
 using System.Reflection;
 
 namespace BarcodeGenerator;
@@ -27,9 +29,23 @@ internal static class Program {
         // see https://aka.ms/applicationconfiguration.
         ApplicationConfiguration.Initialize();
 
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(AppContext.BaseDirectory)
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
+
+        var barcodeGeneratorConfiguration = configuration
+            .GetSection(BarcodeGeneratorConfiguration.SectionName)
+            .Get<BarcodeGeneratorConfiguration>() ?? new BarcodeGeneratorConfiguration();
+
         var builder = new ContainerBuilder();
 
         var thisAssembly = Assembly.GetExecutingAssembly();
+
+        builder.RegisterInstance(barcodeGeneratorConfiguration)
+            .AsSelf()
+            .SingleInstance();
+
         builder.RegisterAssemblyTypes(thisAssembly)
                 .Where<object, ScanningActivatorData, DynamicRegistrationStyle>(t => t.Name.EndsWith("Form"))
                 .AsSelf()
