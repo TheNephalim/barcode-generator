@@ -15,6 +15,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarcodeGenerator.Data", "so
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarcodeGenerator.ExcelInfrastructure", "source\BarcodeGenerator.ExcelInfrastructure\BarcodeGenerator.ExcelInfrastructure.csproj", "{BBEB6594-0120-42DB-AA57-CEA28BE07C16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarcodeGenerator.ExcelReports", "source\BarcodeGenerator.ExcelReports\BarcodeGenerator.ExcelReports.csproj", "{D7DF32A0-3960-4722-6986-EA24863ADC6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarcodeGenerator.Reporting.Contracts", "source\BarcodeGenerator.Reporting.Contracts\BarcodeGenerator.Reporting.Contracts.csproj", "{69C54387-BDFA-48A7-B67D-E8852B4A4B3F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarcodeGenerator.Configuration", "source\BarcodeGenerator.Configuration\BarcodeGenerator.Configuration.csproj", "{3D2E765A-7A96-4E4F-BC5A-AFB50C0672DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +51,18 @@ Global
 		{BBEB6594-0120-42DB-AA57-CEA28BE07C16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBEB6594-0120-42DB-AA57-CEA28BE07C16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBEB6594-0120-42DB-AA57-CEA28BE07C16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7DF32A0-3960-4722-6986-EA24863ADC6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7DF32A0-3960-4722-6986-EA24863ADC6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7DF32A0-3960-4722-6986-EA24863ADC6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7DF32A0-3960-4722-6986-EA24863ADC6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69C54387-BDFA-48A7-B67D-E8852B4A4B3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69C54387-BDFA-48A7-B67D-E8852B4A4B3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69C54387-BDFA-48A7-B67D-E8852B4A4B3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69C54387-BDFA-48A7-B67D-E8852B4A4B3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D2E765A-7A96-4E4F-BC5A-AFB50C0672DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D2E765A-7A96-4E4F-BC5A-AFB50C0672DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D2E765A-7A96-4E4F-BC5A-AFB50C0672DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D2E765A-7A96-4E4F-BC5A-AFB50C0672DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
