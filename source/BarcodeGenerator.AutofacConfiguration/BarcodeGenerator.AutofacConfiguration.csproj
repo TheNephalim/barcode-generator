@@ -11,7 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BarcodeGenerator.ExcelInfrastructure\BarcodeGenerator.ExcelInfrastructure.csproj" />
+    <ProjectReference Include="..\BarcodeGenerator.ExcelReports\BarcodeGenerator.ExcelReports.csproj" />
     <ProjectReference Include="..\BarcodeGenerator.LabelGeneration\BarcodeGenerator.LabelGeneration.csproj" />
+    <ProjectReference Include="..\BarcodeGenerator.Reporting.Contracts\BarcodeGenerator.Reporting.Contracts.csproj" />
   </ItemGroup>
 
 </Project>
