@@ -9,14 +9,14 @@ using ClosedXML.Excel;
 namespace BarcodeGenerator.ExcelInfrastructure.Helpers;
 
 /// <summary>
-/// Represents the parameters required for configuring Excel headers in a workbook.
+/// Represents the parameters required for configuring Excel headers in a worksheet.
 /// </summary>
 /// <typeparam name="TAttribute">
-/// The type of the attribute used to define header properties.
+/// The type of the attribute used to define header properties. This type must implement <see cref="IExcelColumnAttribute"/>.
 /// </typeparam>
 /// <remarks>
-/// This record is used to encapsulate the configuration details for adding headers to an Excel worksheet,
-/// including workbook reference, worksheet number, header styles, and header attributes.
+/// This record is used to encapsulate all necessary information for adding headers to an Excel worksheet,
+/// such as workbook reference, worksheet number, header row configuration, and styling options.
 /// </remarks>
 public record ExcelHeaderParameters<TAttribute> {
     /// <summary>
