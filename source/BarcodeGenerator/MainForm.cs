@@ -16,6 +16,7 @@ public partial class MainForm : Form {
     private readonly Func<InventorySourceMaintenance> _inventorySourceMaintenanceFactory;
     private readonly Func<PriceLabelGenerator> _pricingLabelGeneratorFormFactory;
     private readonly Func<PrintInventoryLabels> _printInventoryLabelsFactory;
+    private readonly Func<InventorySpreadsheetGenerator> _spreadsheetGeneratorFactory;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MainForm"/> class.
@@ -29,7 +30,9 @@ public partial class MainForm : Form {
         Func<PriceLabelGenerator> pricingLabelGeneratorFormFactory,
         Func<InventorySourceMaintenance> inventorySourceMaintenanceFactory,
         Func<PrintInventoryLabels> printInventoryLabelsFactory,
-        Func<ImportFlipwiseInventoryExport> flipwiseInventoryExportFactory, IInventoryItemRepository inventoryItemRepository) {
+        Func<ImportFlipwiseInventoryExport> flipwiseInventoryExportFactory,
+        Func<InventorySpreadsheetGenerator> spreadsheetGeneratorFactory,
+        IInventoryItemRepository inventoryItemRepository) {
         InitializeComponent();
 
         _barcodeLabelGeneratorFactory = barcodeLabelGeneratorFactory ?? throw new ArgumentNullException(nameof(barcodeLabelGeneratorFactory));
@@ -37,6 +40,7 @@ public partial class MainForm : Form {
         _inventorySourceMaintenanceFactory = inventorySourceMaintenanceFactory ?? throw new ArgumentNullException(nameof(inventorySourceMaintenanceFactory));
         _printInventoryLabelsFactory = printInventoryLabelsFactory ?? throw new ArgumentNullException(nameof(printInventoryLabelsFactory));
         _flipwiseInventoryExportFactory = flipwiseInventoryExportFactory ?? throw new ArgumentNullException(nameof(flipwiseInventoryExportFactory));
+        _spreadsheetGeneratorFactory = spreadsheetGeneratorFactory ?? throw new ArgumentNullException(nameof(spreadsheetGeneratorFactory));
         _inventoryItemRepository = inventoryItemRepository ?? throw new ArgumentNullException(nameof(inventoryItemRepository));
     }
 
@@ -77,6 +81,20 @@ public partial class MainForm : Form {
     /// </remarks>
     private void btnLaunchPrintInventoryLabels_Click(object sender, EventArgs e) {
         var form = _printInventoryLabelsFactory();
+        form.ShowDialog(this);
+    }
+
+    /// <summary>
+    /// Handles the <see cref="Button.Click"/> event for the "Launch Spreadsheet Generator" button.
+    /// </summary>
+    /// <param name="sender">The source of the event, typically the button that was clicked.</param>
+    /// <param name="e">An <see cref="EventArgs"/> instance containing the event data.</param>
+    /// <remarks>
+    /// This method creates an instance of the spreadsheet generator form using the factory method
+    /// and displays it as a modal dialog.
+    /// </remarks>
+    private void btnLaunchSpreadsheetGenerator_Click(object sender, EventArgs e) {
+        var form = _spreadsheetGeneratorFactory();
         form.ShowDialog(this);
     }
 
