@@ -19,7 +19,7 @@ namespace BarcodeGenerator.ExcelInfrastructure;
 /// <see cref="IWorksheetPageSetupPropertySetter"/> to handle page setup properties.
 /// </remarks>
 /// <seealso cref="IWorksheetPropertiesSetter" />
-public class WorksheetPropertiesSetter : IWorksheetPropertiesSetter {
+public sealed class WorksheetPropertiesSetter : IWorksheetPropertiesSetter {
     /// <summary>
     /// The worksheet page setup property setter
     /// </summary>
