@@ -46,11 +46,12 @@ partial class PrintInventoryLabels {
         dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
         dataGridView1.Location = new Point(24, 154);
         dataGridView1.Name = "dataGridView1";
-        dataGridView1.MultiSelect = true;
         dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         dataGridView1.Size = new Size(749, 222);
         dataGridView1.TabIndex = 0;
-        dataGridView1.SelectionChanged += DataGridView1_SelectionChanged;
+        dataGridView1.CellMouseDown += dataGridView1_CellMouseDown;
+        dataGridView1.CellMouseUp += dataGridView1_CellMouseUp;
+        dataGridView1.CurrentCellDirtyStateChanged += dataGridView1_CurrentCellDirtyStateChanged;
         // 
         // chkSelectAllItems
         // 
