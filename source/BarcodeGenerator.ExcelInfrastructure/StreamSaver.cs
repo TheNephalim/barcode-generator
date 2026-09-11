@@ -15,13 +15,14 @@ namespace BarcodeGenerator.ExcelInfrastructure;
 /// This class implements the <see cref="IStreamSaver"/> interface and utilizes the ClosedXML library
 /// to handle Excel workbook operations.
 /// </remarks>
-public class StreamSaver : IStreamSaver {
+public sealed class StreamSaver : IStreamSaver {
 
     /// <summary>
-    /// Saves to stream.
+    /// Saves the specified Excel workbook to a memory stream.
     /// </summary>
-    /// <param name="workbook">The workbook.</param>
-    /// <returns>Stream.</returns>
+    /// <param name="workbook">The Excel workbook to save. Must not be <c>null</c>.</param>
+    /// <returns>A <see cref="Stream"/> containing the saved workbook data.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="workbook"/> is <c>null</c>.</exception>
     public Stream SaveToStream(IXLWorkbook workbook) {
         ArgumentNullException.ThrowIfNull(workbook);
 
