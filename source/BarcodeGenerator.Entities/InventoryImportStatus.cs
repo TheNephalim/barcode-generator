@@ -1,11 +1,7 @@
 ﻿// ***********************************************************************
-// Assembly          : ${$NAMESPACE$}
+// Assembly          : BarcodeGenerator.Entities
 // Author            : Robert Eberhart
 // Created           : 09-05-2026
-// ***********************************************************************
-// <copyright file="InventoryImportStatus.cs" company="Littoral Combat Ships">
-//     Copyright (c) 2026 Littoral Combat Ships. All rights reserved.
-// </copyright>
 // ***********************************************************************
 
 namespace BarcodeGenerator.Entities;
