@@ -17,7 +17,7 @@ namespace BarcodeGenerator.ExcelInfrastructure;
 /// manipulate the worksheet's page setup and view configurations.
 /// </remarks>
 /// <seealso cref="IWorksheetPageSetupPropertySetter" />
-public class WorksheetPageSetupPropertySetter : IWorksheetPageSetupPropertySetter {
+public sealed class WorksheetPageSetupPropertySetter : IWorksheetPageSetupPropertySetter {
 
     /// <summary>
     /// Sets the specified worksheet.
@@ -68,19 +68,29 @@ public class WorksheetPageSetupPropertySetter : IWorksheetPageSetupPropertySette
     /// <param name="rowsToRepeat">The rows to repeat.</param>
     private static void SetRowsToReport(IXLPageSetup pageSetup, bool shouldRepeatRows, Tuple<int, int>? rowsToRepeat) {
         ArgumentNullException.ThrowIfNull(pageSetup);
-        ArgumentNullException.ThrowIfNull(rowsToRepeat);
+
+        if (!shouldRepeatRows || rowsToRepeat is null) {
+            return;
+        }
 
         var (rowStart, rowEnd) = rowsToRepeat;
-        if (!shouldRepeatRows) return;
-
         pageSetup.SetRowsToRepeatAtTop(rowStart, rowEnd);
     }
 
     /// <summary>
-    /// Sets the sheet view.
+    /// Configures the sheet view settings for the specified worksheet.
     /// </summary>
-    /// <param name="sheetView">The sheet view.</param>
-    /// <param name="freezeRow">The freeze row.</param>
+    /// <param name="sheetView">The sheet view to configure.</param>
+    /// <param name="freezeRow">
+    /// The row index to freeze. Rows above this index will remain visible when scrolling.
+    /// </param>
+    /// <remarks>
+    /// This method sets the sheet view to normal mode and applies the specified freeze row setting.
+    /// It utilizes the ClosedXML library's <see cref="IXLSheetView"/> to manipulate the view configuration.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if <paramref name="sheetView"/> is <c>null</c>.
+    /// </exception>
     private static void SetSheetView(IXLSheetView sheetView, int freezeRow) {
         sheetView.SetView(XLSheetViewOptions.Normal);
         sheetView.Freeze(freezeRow, 0);
