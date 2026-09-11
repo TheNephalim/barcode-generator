@@ -12,14 +12,6 @@ namespace BarcodeGenerator.ExcelInfrastructure;
 /// <typeparam name="T">The type of the data associated with the workbook.</typeparam>
 public interface IWorkbookParameters<T> {
     /// <summary>
-    /// Gets or sets the unique identifier for the application associated with the workbook.
-    /// </summary>
-    /// <value>
-    /// The unique identifier for the application.
-    /// </value>
-    Guid ApplicationId { get; set; }
-
-    /// <summary>
     /// Gets or sets the author.
     /// </summary>
     /// <value>The author.</value>
