@@ -12,10 +12,10 @@ using System.Drawing;
 namespace BarcodeGenerator.ExcelInfrastructure.Helpers;
 
 /// <summary>
-/// Represents the parameters used for configuring ClosedXML-related settings,
-/// such as font, colors, and row height, when working with Excel worksheets.
+/// Represents the parameters used for configuring ClosedXML operations,
+/// such as styling and formatting of Excel worksheets.
 /// </summary>
-public class ClosedXmlParameters {
+public sealed class ClosedXmlParameters {
     /// <summary>
     /// Gets or sets the color of the background.
     /// </summary>
