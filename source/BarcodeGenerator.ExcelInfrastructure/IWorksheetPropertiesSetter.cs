@@ -18,11 +18,19 @@ namespace BarcodeGenerator.ExcelInfrastructure;
 public interface IWorksheetPropertiesSetter {
 
     /// <summary>
-    /// Sets the specified worksheet.
+    /// Configures and applies properties to the specified Excel worksheet.
     /// </summary>
-    /// <param name="worksheet">The worksheet.</param>
-    /// <param name="reportName"></param>
-    /// <param name="worksheetProperties">The worksheet properties.</param>
+    /// <param name="worksheet">The worksheet to configure.</param>
+    /// <param name="reportName">The name of the report associated with the worksheet.</param>
+    /// <param name="worksheetProperties">The properties to apply to the worksheet.</param>
+    /// <remarks>
+    /// This method is responsible for setting up various worksheet properties, such as freezing rows,
+    /// repeating rows, and setting worksheet titles. It ensures that the worksheet is properly configured
+    /// according to the provided <paramref name="worksheetProperties"/>.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if <paramref name="worksheet"/> or <paramref name="worksheetProperties"/> is <c>null</c>.
+    /// </exception>
     void Set(IXLWorksheet worksheet, string reportName,
         WorksheetProperties worksheetProperties);
 }
