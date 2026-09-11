@@ -1,11 +1,7 @@
 ﻿// ***********************************************************************
-// Assembly          : ${$NAMESPACE$}
+// Assembly          : BarcodeGenerator.Data
 // Author            : Robert Eberhart
 // Created           : 09-05-2026
-// ***********************************************************************
-// <copyright file="IInventorySkuRepository.cs" company="Littoral Combat Ships">
-//     Copyright (c) 2026 Littoral Combat Ships. All rights reserved.
-// </copyright>
 // ***********************************************************************
 
 namespace BarcodeGenerator.Data.Repositories;
