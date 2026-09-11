@@ -4,24 +4,26 @@
 // Created          : 09-05-2026
 // ***********************************************************************
 
-using BarcodeGenerator.ExcelInfrastructure.Attributes;
+using BarcodeGenerator.Reporting.Contracts.Attributes;
 using System.Reflection;
 
 namespace BarcodeGenerator.ExcelInfrastructure.ColumnInfoProcessors;
 
 /// <summary>
-/// Processes column information for a specified type of attribute that implements
-/// <see cref="IExcelColumnAttribute" />.
+/// Provides functionality to process column information for types that implement
+/// <see cref="IExcelColumnAttribute"/>.
 /// </summary>
 /// <typeparam name="T">
-/// The type of attribute to process. Must be a class that inherits from
-/// <see cref="Attribute" /> and implements <see cref="IExcelColumnAttribute" />.
+/// The type of attribute that implements <see cref="IExcelColumnAttribute"/> and is used
+/// to define metadata for Excel columns.
 /// </typeparam>
 /// <remarks>
-/// This class provides functionality to retrieve and process column information
-/// from properties of a given data type that are decorated with the specified attribute.
+/// This class is responsible for extracting and organizing metadata from properties of a given type
+/// that are decorated with the specified attribute <typeparamref name="T"/>. The extracted metadata
+/// can be used to configure and customize the appearance and behavior of Excel columns.
 /// </remarks>
-public class ColumnInfoProcessor<T> : IColumnInfoProcessor<T> where T : Attribute, IExcelColumnAttribute {
+/// <seealso cref="IColumnInfoProcessor{T}" />
+public sealed class ColumnInfoProcessor<T> : IColumnInfoProcessor<T> where T : Attribute, IExcelColumnAttribute {
 
     /// <summary>
     /// Gets the column information.
@@ -33,6 +35,7 @@ public class ColumnInfoProcessor<T> : IColumnInfoProcessor<T> where T : Attribut
             .GetProperties()
             .Where(prop => Attribute.IsDefined(prop, typeof(T)))
             .Select(x => x.GetCustomAttribute<T>())
+            .OfType<T>()
             .OrderBy(orderByColumn => orderByColumn.ColumnOrder)];
     }
 }
