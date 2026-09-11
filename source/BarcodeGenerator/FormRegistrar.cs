@@ -57,5 +57,9 @@ public static class FormRegistrar {
         builder.RegisterType<PrintInventoryLabels>()
             .AsSelf()
             .InstancePerDependency();
+
+        builder.RegisterType<InventorySpreadsheetGenerator>()
+            .AsSelf()
+            .InstancePerDependency();
     }
 }
