@@ -16,12 +16,20 @@
   <ItemGroup>
     <PackageReference Include="Autofac" />
     <PackageReference Include="CsvHelper" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BarcodeGenerator.Configuration\BarcodeGenerator.Configuration.csproj" />
     <ProjectReference Include="..\BarcodeGenerator.Entities\BarcodeGenerator.Entities.csproj" />
     <ProjectReference Include="..\BarcodeGenerator.AutofacConfiguration\BarcodeGenerator.AutofacConfiguration.csproj" />
     <ProjectReference Include="..\barcodegenerator.data\BarcodeGenerator.Data.csproj" />
+    <ProjectReference Include="..\BarcodeGenerator.ExcelInfrastructure\BarcodeGenerator.ExcelInfrastructure.csproj" />
+    <ProjectReference Include="..\BarcodeGenerator.ExcelReports\BarcodeGenerator.ExcelReports.csproj" />
+    <ProjectReference Include="..\BarcodeGenerator.Reporting.Contracts\BarcodeGenerator.Reporting.Contracts.csproj" />
   </ItemGroup>
 
 </Project>
