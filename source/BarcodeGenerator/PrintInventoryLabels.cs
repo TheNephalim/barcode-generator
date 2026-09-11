@@ -3,6 +3,8 @@ using BarcodeGenerator.Entities;
 using BarcodeGenerator.LabelGeneration;
 using System.ComponentModel;
 
+// ReSharper disable ClassNeverInstantiated.Global
+
 // ReSharper disable AsyncVoidEventHandlerMethod
 
 namespace BarcodeGenerator;
@@ -19,6 +21,8 @@ public partial class PrintInventoryLabels : Form {
     private readonly IRenderedInventoryLabelGenerator _inventoryLabelGenerator;
     private readonly ILabelPrinter _labelPrinter;
     private IList<InventoryLabelRow> _allInventoryLabelRows = new List<InventoryLabelRow>();
+
+    private bool _isUpdatingSelection;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PrintInventoryLabels"/> class.
@@ -86,15 +90,11 @@ public partial class PrintInventoryLabels : Form {
     /// data after applying filters or loading new data.
     /// </remarks>
     private void BindGrid(IEnumerable<InventoryLabelRow> rows) {
-        dataGridView1.SelectionChanged -= DataGridView1_SelectionChanged;
-
         dataGridView1.DataSource =
             new BindingList<InventoryLabelRow>([.. rows]);
 
         dataGridView1.MultiSelect = true;
         dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
-        dataGridView1.SelectionChanged += DataGridView1_SelectionChanged;
     }
 
     /// <summary>
@@ -238,7 +238,13 @@ public partial class PrintInventoryLabels : Form {
     /// checked state of the <see cref="chkSelectAllItems"/> control.
     /// </remarks>
     private void chkSelectAllItems_CheckedChanged(object sender, EventArgs e) {
-        if (dataGridView1.DataSource is not BindingList<InventoryLabelRow> rows) return;
+        if (_isUpdatingSelection) {
+            return;
+        }
+
+        if (dataGridView1.DataSource is not BindingList<InventoryLabelRow> rows) {
+            return;
+        }
 
         foreach (var row in rows) {
             row.IsSelected = chkSelectAllItems.Checked;
@@ -282,29 +288,110 @@ public partial class PrintInventoryLabels : Form {
     }
 
     /// <summary>
-    /// Handles the <see cref="DataGridView.SelectionChanged"/> event for <c>dataGridView1</c>.
+    /// Handles the <see cref="DataGridView.CellMouseDown"/> event for <c>dataGridView1</c>.
     /// </summary>
-    /// <param name="sender">The source of the event, typically <c>dataGridView1</c>.</param>
-    /// <param name="args">An <see cref="EventArgs"/> instance containing the event data.</param>
+    /// <param name="sender">The source of the event, typically the <see cref="DataGridView"/>.</param>
+    /// <param name="e">A <see cref="DataGridViewCellMouseEventArgs"/> that contains the event data.</param>
     /// <remarks>
-    /// This method toggles the selection state of rows in the DataGridView and updates the state of the "Select All" checkbox
-    /// based on whether all rows are selected.
+    /// This method ensures that the row corresponding to the clicked cell is selected when the Shift key is held down.
+    /// It also ignores clicks on the header row.
     /// </remarks>
-    private void DataGridView1_SelectionChanged(object? sender, EventArgs args) {
-        if (dataGridView1.SelectedRows.Count == 0) return;
+    private void dataGridView1_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e) {
+        if (e.RowIndex < 0) {
+            return;
+        }
 
-        for (var i = 0; i < dataGridView1.SelectedRows.Count; i++) {
-            var row = dataGridView1.SelectedRows[i];
-            if (row.DataBoundItem is InventoryLabelRow inventoryLabelRow) {
-                inventoryLabelRow.IsSelected = !inventoryLabelRow.IsSelected;
+        if ((ModifierKeys & Keys.Shift) == Keys.Shift) {
+            dataGridView1.Rows[e.RowIndex].Selected = true;
+        }
+    }
+
+    /// <summary>
+    /// Handles the <see cref="DataGridView.CellMouseUp"/> event for <c>dataGridView1</c>.
+    /// </summary>
+    /// <param name="sender">The source of the event, typically the <see cref="DataGridView"/>.</param>
+    /// <param name="e">
+    /// A <see cref="DataGridViewCellMouseEventArgs"/> that contains the event data,
+    /// including the row and column indices of the clicked cell.
+    /// </param>
+    /// <remarks>
+    /// This method processes mouse-up events on cells in the <c>dataGridView1</c> control.
+    /// It handles different scenarios such as row header clicks, checkbox clicks, and normal cell clicks.
+    /// The method updates the selection state of rows and refreshes the control accordingly.
+    /// </remarks>
+    private void dataGridView1_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e) {
+        if (e.RowIndex < 0) {
+            return;
+        }
+
+        dataGridView1.EndEdit();
+
+        var clickedRow = dataGridView1.Rows[e.RowIndex];
+
+        //
+        // Row header click.
+        //
+        if (e.ColumnIndex < 0) {
+            foreach (DataGridViewRow row in dataGridView1.SelectedRows) {
+                if (row.DataBoundItem is InventoryLabelRow item) {
+                    item.IsSelected = true;
+                }
+            }
+
+            UpdateSelectAllState();
+            dataGridView1.Refresh();
+            return;
+        }
+
+        //
+        // Checkbox click.
+        //
+        if (dataGridView1.Columns[e.ColumnIndex]
+            is DataGridViewCheckBoxColumn) {
+            foreach (DataGridViewRow row in dataGridView1.SelectedRows) {
+                if (row.DataBoundItem is InventoryLabelRow item) {
+                    item.IsSelected = true;
+                }
+            }
+
+            if (clickedRow.DataBoundItem is InventoryLabelRow clickedItem) {
+                clickedItem.IsSelected =
+                    Convert.ToBoolean(
+                        clickedRow.Cells[e.ColumnIndex].Value);
+            }
+
+            UpdateSelectAllState();
+            dataGridView1.Refresh();
+            return;
+        }
+
+        //
+        // Normal cell click / Shift+click.
+        //
+        foreach (DataGridViewRow row in dataGridView1.SelectedRows) {
+            if (row.DataBoundItem is InventoryLabelRow item) {
+                item.IsSelected = true;
             }
         }
 
-        // Update the "Select All" checkbox state based on whether all rows are selected.
-        if (dataGridView1.DataSource is BindingList<InventoryLabelRow> rows && rows.Any()) {
-            chkSelectAllItems.Checked = rows.All(r => r.IsSelected);
-        } else {
-            chkSelectAllItems.Checked = false;
+        UpdateSelectAllState();
+        dataGridView1.Refresh();
+    }
+
+    /// <summary>
+    /// Handles the <see cref="DataGridView.CurrentCellDirtyStateChanged"/> event for <see cref="dataGridView1"/>.
+    /// </summary>
+    /// <param name="sender">The source of the event, typically <see cref="dataGridView1"/>.</param>
+    /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
+    /// <remarks>
+    /// This method ensures that changes in a <see cref="DataGridViewCheckBoxCell"/> are committed
+    /// immediately when the cell's dirty state changes.
+    /// </remarks>
+    private void dataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e) {
+        if (dataGridView1.IsCurrentCellDirty &&
+            dataGridView1.CurrentCell is DataGridViewCheckBoxCell) {
+            dataGridView1.CommitEdit(
+                DataGridViewDataErrorContexts.Commit);
         }
     }
 
@@ -319,7 +406,7 @@ public partial class PrintInventoryLabels : Form {
         dataGridView1.AutoGenerateColumns = false;
         dataGridView1.AllowUserToAddRows = false;
         dataGridView1.AllowUserToDeleteRows = false;
-        dataGridView1.MultiSelect = false;
+        dataGridView1.MultiSelect = true;
         dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
         dataGridView1.Columns.Clear();
@@ -506,5 +593,28 @@ public partial class PrintInventoryLabels : Form {
     /// </remarks>
     private void txtInventoryFilter_TextChanged(object sender, EventArgs e) {
         ApplyFilter();
+    }
+
+    /// <summary>
+    /// Updates the state of the "Select All" checkbox based on the selection state of all rows in the data grid.
+    /// </summary>
+    /// <remarks>
+    /// This method evaluates whether all rows in the <see cref="dataGridView1"/> are selected.
+    /// If all rows are selected, the "Select All" checkbox is checked; otherwise, it is unchecked.
+    /// </remarks>
+    private void UpdateSelectAllState() {
+        _isUpdatingSelection = true;
+
+        try {
+            if (dataGridView1.DataSource
+                is BindingList<InventoryLabelRow> { Count: > 0 } rows) {
+                chkSelectAllItems.Checked =
+                    rows.All(x => x.IsSelected);
+            } else {
+                chkSelectAllItems.Checked = false;
+            }
+        } finally {
+            _isUpdatingSelection = false;
+        }
     }
 }
