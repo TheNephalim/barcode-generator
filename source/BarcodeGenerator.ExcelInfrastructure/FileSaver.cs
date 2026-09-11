@@ -15,7 +15,7 @@ namespace BarcodeGenerator.ExcelInfrastructure;
 /// This class implements the <see cref="IFileSaver"/> interface and utilizes the ClosedXML library
 /// to handle Excel workbook operations.
 /// </remarks>
-public class FileSaver : IFileSaver {
+public sealed class FileSaver : IFileSaver {
 
     /// <summary>
     /// Saves the specified Excel workbook to a file.
