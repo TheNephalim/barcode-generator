@@ -12,6 +12,14 @@ using System.Drawing;
 
 namespace BarcodeGenerator.ExcelReports;
 
+/// <summary>
+/// Represents a generator for creating inventory reports in Excel format.
+/// </summary>
+/// <remarks>
+/// This class is responsible for generating Excel workbooks containing inventory data.
+/// It utilizes various dependencies such as file savers, stream savers, workbook property setters,
+/// and worksheet builders to construct and save the reports.
+/// </remarks>
 public sealed class InventoryReportGenerator : IExcelWorkbookGenerator<InventoryItemDto[]> {
     private readonly IInventoryReportWorksheetBuilder<InventoryReportWorksheetBuilder, InventoryItemDto[]> _builder;
     private readonly BarcodeGeneratorConfiguration _configuration;
