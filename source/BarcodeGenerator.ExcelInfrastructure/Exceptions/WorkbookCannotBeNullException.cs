@@ -3,12 +3,16 @@
 // Author           : Robert Eberhart
 // Created          : 09-05-2026
 // ***********************************************************************
+
+using System.Diagnostics.CodeAnalysis;
+
 namespace BarcodeGenerator.ExcelInfrastructure.Exceptions;
 
 /// <summary>
 /// Represents an exception that is thrown when a workbook is null.
 /// </summary>
-public class WorkbookCannotBeNullException : Exception {
+[ExcludeFromCodeCoverage]
+public sealed class WorkbookCannotBeNullException : Exception {
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WorkbookCannotBeNullException" /> class.
