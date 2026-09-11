@@ -3,16 +3,20 @@
 // Author           : Robert Eberhart
 // Created          : 09-05-2026
 // ***********************************************************************
+
+using System.Diagnostics.CodeAnalysis;
+
 namespace BarcodeGenerator.ExcelInfrastructure.Exceptions;
 
 /// <summary>
-/// Represents an exception that is thrown when a worksheet is null in the context of Excel infrastructure operations.
+/// Represents an exception that is thrown when a worksheet is null in the context of Excel operations.
 /// </summary>
 /// <remarks>
-/// This exception is typically used to indicate that a required worksheet parameter is missing or null,
-/// which is essential for performing operations on Excel worksheets.
+/// This exception is typically used to indicate that a required worksheet object is missing or null
+/// when performing operations that depend on its presence.
 /// </remarks>
-public class WorksheetCannotBeNullException : Exception {
+[ExcludeFromCodeCoverage]
+public sealed class WorksheetCannotBeNullException : Exception {
 
     // Default constructor
     /// <summary>
