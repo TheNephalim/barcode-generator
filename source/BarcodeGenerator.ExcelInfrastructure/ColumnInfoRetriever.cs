@@ -10,14 +10,14 @@ using BarcodeGenerator.ExcelInfrastructure.ColumnInfoProcessors;
 namespace BarcodeGenerator.ExcelInfrastructure;
 
 /// <summary>
-/// Provides functionality to retrieve column information for a specified data transfer object type
-/// using a designated column information processor.
+/// Provides functionality to retrieve column information for Excel processing.
 /// </summary>
 /// <remarks>
-/// This class implements the <see cref="IColumnInfoRetriever"/> interface and utilizes
-/// indexed processors to extract column information based on the specified processor type.
+/// This class implements the <see cref="IColumnInfoRetriever"/> interface and is responsible for retrieving
+/// column metadata based on the specified processors, processor type, and data transfer object type.
 /// </remarks>
-public class ColumnInfoRetriever : IColumnInfoRetriever {
+/// <seealso cref="IColumnInfoRetriever" />
+public sealed class ColumnInfoRetriever : IColumnInfoRetriever {
 
     /// <summary>
     /// Retrieves the column information.
