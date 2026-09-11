@@ -1,11 +1,7 @@
 ﻿// ***********************************************************************
-// Assembly          : ${$NAMESPACE$}
+// Assembly          : BarcodeGenerator.LabelGeneration
 // Author            : Robert Eberhart
 // Created           : 09-05-2026
-// ***********************************************************************
-// <copyright file="IRenderedInventoryLabelGenerator.cs" company="Littoral Combat Ships">
-//     Copyright (c) 2026 Littoral Combat Ships. All rights reserved.
-// </copyright>
 // ***********************************************************************
 
 using BarcodeGenerator.Entities;
