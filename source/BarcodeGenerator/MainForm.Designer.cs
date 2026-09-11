@@ -42,6 +42,7 @@
             printTestLabelToolStripMenuItem = new ToolStripMenuItem();
             maintenanceToolStripMenuItem = new ToolStripMenuItem();
             inventorySourcesToolStripMenuItem = new ToolStripMenuItem();
+            clearAllInventoryToolStripMenuItem = new ToolStripMenuItem();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             scannerTestToolStripMenuItem = new ToolStripMenuItem();
             resetLastNumberToolStripMenuItem = new ToolStripMenuItem();
@@ -53,7 +54,8 @@
             errorProvider1 = new ErrorProvider(components);
             btnLaunchPrintInventoryLabels = new Button();
             label1 = new Label();
-            clearAllInventoryToolStripMenuItem = new ToolStripMenuItem();
+            btnLaunchSpreadsheetGenerator = new Button();
+            label2 = new Label();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
@@ -164,9 +166,16 @@
             // inventorySourcesToolStripMenuItem
             // 
             inventorySourcesToolStripMenuItem.Name = "inventorySourcesToolStripMenuItem";
-            inventorySourcesToolStripMenuItem.Size = new Size(180, 22);
+            inventorySourcesToolStripMenuItem.Size = new Size(171, 22);
             inventorySourcesToolStripMenuItem.Text = "Inventory Sources";
             inventorySourcesToolStripMenuItem.Click += inventorySourcesToolStripMenuItem_Click;
+            // 
+            // clearAllInventoryToolStripMenuItem
+            // 
+            clearAllInventoryToolStripMenuItem.Name = "clearAllInventoryToolStripMenuItem";
+            clearAllInventoryToolStripMenuItem.Size = new Size(171, 22);
+            clearAllInventoryToolStripMenuItem.Text = "Clear All Inventory";
+            clearAllInventoryToolStripMenuItem.Click += ClearAllInventoryToolStripMenuItem_Click;
             // 
             // toolsToolStripMenuItem
             // 
@@ -244,12 +253,26 @@
             label1.TabIndex = 6;
             label1.Text = "Launch Print Inventory Labels";
             // 
-            // clearAllInventoryToolStripMenuItem
+            // btnLaunchSpreadsheetGenerator
             // 
-            clearAllInventoryToolStripMenuItem.Name = "clearAllInventoryToolStripMenuItem";
-            clearAllInventoryToolStripMenuItem.Size = new Size(180, 22);
-            clearAllInventoryToolStripMenuItem.Text = "Clear All Inventory";
-            clearAllInventoryToolStripMenuItem.Click += ClearAllInventoryToolStripMenuItem_Click;
+            btnLaunchSpreadsheetGenerator.Location = new Point(640, 52);
+            btnLaunchSpreadsheetGenerator.Name = "btnLaunchSpreadsheetGenerator";
+            btnLaunchSpreadsheetGenerator.Size = new Size(98, 23);
+            btnLaunchSpreadsheetGenerator.TabIndex = 7;
+            btnLaunchSpreadsheetGenerator.Text = "Launch";
+            btnLaunchSpreadsheetGenerator.UseVisualStyleBackColor = true;
+            btnLaunchSpreadsheetGenerator.Click += btnLaunchSpreadsheetGenerator_Click;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.ForeColor = Color.White;
+            label2.Location = new Point(428, 55);
+            label2.Name = "label2";
+            label2.Size = new Size(206, 17);
+            label2.TabIndex = 8;
+            label2.Text = "Generate Inventory Spreadsheet";
             // 
             // MainForm
             // 
@@ -257,6 +280,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.DarkSeaGreen;
             ClientSize = new Size(800, 212);
+            Controls.Add(label2);
+            Controls.Add(btnLaunchSpreadsheetGenerator);
             Controls.Add(label1);
             Controls.Add(btnLaunchPrintInventoryLabels);
             Controls.Add(btnLaunchPriceLabelGenerator);
@@ -303,5 +328,7 @@
         private Label label1;
         private Button btnLaunchPrintInventoryLabels;
         private ToolStripMenuItem clearAllInventoryToolStripMenuItem;
+        private Button btnLaunchSpreadsheetGenerator;
+        private Label label2;
     }
 }
