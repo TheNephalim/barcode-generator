@@ -4,6 +4,8 @@
 // Created          : 09-05-2026
 // ***********************************************************************
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace BarcodeGenerator.ExcelInfrastructure;
 
 /// <summary>
@@ -15,15 +17,8 @@ namespace BarcodeGenerator.ExcelInfrastructure;
 /// including author information, company details, creation date, file name, subject,
 /// and worksheet-specific properties.
 /// </remarks>
-public class WorkbookParameters<T> : IWorkbookParameters<T> {
-    /// <summary>
-    /// Gets or sets the unique identifier for the application associated with the workbook.
-    /// </summary>
-    /// <value>
-    /// The unique identifier for the application.
-    /// </value>
-    public Guid ApplicationId { get; set; }
-
+[ExcludeFromCodeCoverage]
+public sealed class WorkbookParameters<T> : IWorkbookParameters<T> {
     /// <summary>
     /// Gets or sets the author.
     /// </summary>
