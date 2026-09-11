@@ -11,4 +11,8 @@
     <PackageReference Include="ClosedXML" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BarcodeGenerator.Reporting.Contracts\BarcodeGenerator.Reporting.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>
