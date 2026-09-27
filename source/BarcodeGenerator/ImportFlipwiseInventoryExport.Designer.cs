@@ -45,9 +45,12 @@
             cmbFilterSource = new ComboBox();
             grpbFilters = new GroupBox();
             btnSelectFiltered = new Button();
+            numSkuSequence = new NumericUpDown();
+            lblSkuSequence = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             grpbAssign.SuspendLayout();
             grpbFilters.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numSkuSequence).BeginInit();
             SuspendLayout();
             // 
             // openFileDialog1
@@ -116,7 +119,7 @@
             // cmbAssignSource
             // 
             cmbAssignSource.FormattingEnabled = true;
-            cmbAssignSource.Location = new Point(104, 69);
+            cmbAssignSource.Location = new Point(118, 68);
             cmbAssignSource.Name = "cmbAssignSource";
             cmbAssignSource.Size = new Size(179, 25);
             cmbAssignSource.TabIndex = 6;
@@ -165,7 +168,7 @@
             // 
             // txtAssignPrefix
             // 
-            txtAssignPrefix.Location = new Point(104, 30);
+            txtAssignPrefix.Location = new Point(118, 30);
             txtAssignPrefix.MaxLength = 3;
             txtAssignPrefix.Name = "txtAssignPrefix";
             txtAssignPrefix.Size = new Size(119, 25);
@@ -182,7 +185,7 @@
             label3.TabIndex = 12;
             label3.Text = "Filter:";
             // 
-            // textBox2
+            // txtFilterInput
             // 
             txtFilterInput.Location = new Point(112, 25);
             txtFilterInput.MaxLength = 80;
@@ -204,6 +207,8 @@
             // 
             // grpbAssign
             // 
+            grpbAssign.Controls.Add(lblSkuSequence);
+            grpbAssign.Controls.Add(numSkuSequence);
             grpbAssign.Controls.Add(btnApplyToSelected);
             grpbAssign.Controls.Add(lblPrefix);
             grpbAssign.Controls.Add(txtAssignPrefix);
@@ -213,7 +218,7 @@
             grpbAssign.ForeColor = Color.White;
             grpbAssign.Location = new Point(52, 85);
             grpbAssign.Name = "grpbAssign";
-            grpbAssign.Size = new Size(462, 155);
+            grpbAssign.Size = new Size(462, 178);
             grpbAssign.TabIndex = 15;
             grpbAssign.TabStop = false;
             grpbAssign.Text = "Assign";
@@ -221,7 +226,7 @@
             // btnApplyToSelected
             // 
             btnApplyToSelected.ForeColor = Color.Black;
-            btnApplyToSelected.Location = new Point(293, 107);
+            btnApplyToSelected.Location = new Point(293, 129);
             btnApplyToSelected.Name = "btnApplyToSelected";
             btnApplyToSelected.Size = new Size(146, 33);
             btnApplyToSelected.TabIndex = 12;
@@ -279,6 +284,23 @@
             btnSelectFiltered.UseVisualStyleBackColor = true;
             btnSelectFiltered.Click += btnSelectFiltered_Click;
             // 
+            // numSkuSequence
+            // 
+            numSkuSequence.Location = new Point(118, 105);
+            numSkuSequence.Name = "numSkuSequence";
+            numSkuSequence.Size = new Size(120, 25);
+            numSkuSequence.TabIndex = 13;
+            numSkuSequence.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // lblSkuSequence
+            // 
+            lblSkuSequence.AutoSize = true;
+            lblSkuSequence.Location = new Point(16, 107);
+            lblSkuSequence.Name = "lblSkuSequence";
+            lblSkuSequence.Size = new Size(92, 17);
+            lblSkuSequence.TabIndex = 14;
+            lblSkuSequence.Text = "Sku Sequence";
+            // 
             // ImportFlipwiseInventoryExport
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -301,6 +323,7 @@
             grpbAssign.PerformLayout();
             grpbFilters.ResumeLayout(false);
             grpbFilters.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numSkuSequence).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -329,5 +352,7 @@
         private GroupBox grpbFilters;
         private Button btnApplyToSelected;
         private Button btnSelectFiltered;
+        private Label lblSkuSequence;
+        private NumericUpDown numSkuSequence;
     }
 }
